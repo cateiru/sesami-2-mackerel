@@ -36,9 +36,48 @@ func NewClient(cfg *config.Config) *Client {
 	}
 }
 
-func (c *Client) SendMetrics(status *sesami.DeviceStatus) error {
+func (c *Client) SendMetrics(status *sesami.DeviceStatus, serviceName string) error {
 	log.Printf("Mackerelにメトリクスを送信中...")
 
+	metrics := []Metric{
+		{
+			Name:  "sesami-battery-percentage",
+			Value: float64(status.BatteryPercentage),
+			Time:  status.Timestamp,
+		},
+		{
+			Name:  "sesami-battery-voltage",
+			Value: status.BatteryVoltage,
+			Time:  status.Timestamp,
+		},
+	}
+
+	jsonData, err := json.Marshal(metrics)
+	if err != nil {
+		return fmt.Errorf("メトリクスJSON作成エラー: %v", err)
+	}
+
+	url := fmt.Sprintf("https://api.mackerelio.com/api/v0/services/%s/tsdb", serviceName)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+	if err != nil {
+		return fmt.Errorf("リクエスト作成エラー: %v", err)
+	}
+
+	req.Header.Set("X-Api-Key", c.APIKey)
+	req.Header.Set("User-Agent", c.UserAgent)
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("API呼び出しエラー: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("メトリクス送信失敗: ステータスコード %d", resp.StatusCode)
+	}
+
+	log.Printf("メトリクス送信完了: バッテリー残量=%d%%, 電圧=%.2fV", status.BatteryPercentage, status.BatteryVoltage)
 	return nil
 }
 

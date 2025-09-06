@@ -16,10 +16,11 @@ import (
 )
 
 type Scheduler struct {
-	cron           *cron.Cron
-	sesamiClient   *sesami.Client
-	mackerelClient *mackerel.Client
-	dbClient       *database.Client
+	cron                *cron.Cron
+	sesamiClient        *sesami.Client
+	mackerelClient      *mackerel.Client
+	dbClient            *database.Client
+	mackerelServiceName string
 }
 
 func New(cfg *config.Config) (*Scheduler, error) {
@@ -36,10 +37,11 @@ func New(cfg *config.Config) (*Scheduler, error) {
 	}
 
 	return &Scheduler{
-		cron:           cron.New(),
-		sesamiClient:   sesami.NewClient(cfg),
-		mackerelClient: mackerelClient,
-		dbClient:       dbClient,
+		cron:                cron.New(),
+		sesamiClient:        sesami.NewClient(cfg),
+		mackerelClient:      mackerelClient,
+		dbClient:            dbClient,
+		mackerelServiceName: cfg.Mackerel.ServiceName,
 	}, nil
 }
 
@@ -94,7 +96,7 @@ func (s *Scheduler) dailyTask() {
 		}
 	}
 
-	err = s.mackerelClient.SendMetrics(status)
+	err = s.mackerelClient.SendMetrics(status, s.mackerelServiceName)
 	if err != nil {
 		log.Printf("Mackerelメトリクス送信エラー: %v", err)
 		return
