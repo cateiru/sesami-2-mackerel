@@ -1,7 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/cateiru/sesami-2-mackerel/internal/scheduler"
+)
 
 func main() {
-	fmt.Println("Hello World!")
+	fmt.Println("SESAMI to Mackerel監視プログラムを開始します...")
+
+	s := scheduler.New()
+	s.Start()
 }
