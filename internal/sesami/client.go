@@ -32,8 +32,6 @@ func NewClient(cfg *config.Config) *Client {
 }
 
 func (c *Client) GetDeviceStatus() (*DeviceStatus, error) {
-	log.Printf("SESAMI API呼び出し中... (Device UUID: %s)", c.DeviceUUID)
-
 	url := fmt.Sprintf("https://app.candyhouse.co/api/sesame2/%s", c.DeviceUUID)
 
 	req, err := http.NewRequest("GET", url, nil)
@@ -41,7 +39,7 @@ func (c *Client) GetDeviceStatus() (*DeviceStatus, error) {
 		return nil, fmt.Errorf("リクエスト作成エラー: %w", err)
 	}
 
-	req.Header.Set("x-api-key", c.APIKey)
+	req.Header.Set("X-Api-Key", c.APIKey)
 
 	client := &http.Client{
 		Timeout: 30 * time.Second,
