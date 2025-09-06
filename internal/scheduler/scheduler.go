@@ -1,6 +1,7 @@
 package scheduler
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -27,10 +28,17 @@ func New(cfg *config.Config) (*Scheduler, error) {
 		return nil, err
 	}
 
+	mackerelClient := mackerel.NewClient(cfg)
+
+	log.Printf("Mackerelサービス '%s' の存在確認中...", cfg.Mackerel.ServiceName)
+	if err := mackerelClient.EnsureService(cfg.Mackerel.ServiceName); err != nil {
+		return nil, fmt.Errorf("Mackerelサービス確認・作成エラー: %v", err)
+	}
+
 	return &Scheduler{
 		cron:           cron.New(),
 		sesamiClient:   sesami.NewClient(cfg),
-		mackerelClient: mackerel.NewClient(cfg),
+		mackerelClient: mackerelClient,
 		dbClient:       dbClient,
 	}, nil
 }

@@ -18,10 +18,12 @@ type Config struct {
 		APIKey       string
 		APIUserAgent string
 		APITimeout   time.Duration
+		ServiceName  string
 	}
 	Database struct {
 		Path string
 	}
+	TempFilePath string
 }
 
 func Load() *Config {
@@ -37,7 +39,9 @@ func Load() *Config {
 	cfg.SESAMI.APITimeout = 30 * time.Second
 	cfg.Mackerel.APITimeout = 30 * time.Second
 
-	cfg.Database.Path = getEnv("DATABASE_PATH", false)
+	cfg.Database.Path = getEnv("DATABASE_PATH", true)
+
+	cfg.Mackerel.ServiceName = "sesami2mackerel"
 
 	if err := cfg.Validate(); err != nil {
 		log.Fatal(err)
