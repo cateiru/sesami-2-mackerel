@@ -3,9 +3,9 @@ package mackerel
 import (
 	"fmt"
 	"log"
-	"os"
 	"time"
 
+	"github.com/cateiru/sesami-2-mackerel/internal/config"
 	"github.com/cateiru/sesami-2-mackerel/internal/sesami"
 )
 
@@ -19,21 +19,15 @@ type Metric struct {
 	Time  int64   `json:"time"`
 }
 
-func NewClient() *Client {
-	apiKey := os.Getenv("MACKEREL_API_KEY")
-	
-	if apiKey == "" {
-		log.Fatal("MACKEREL_API_KEY の環境変数が設定されていません")
-	}
-
+func NewClient(cfg *config.Config) *Client {
 	return &Client{
-		APIKey: apiKey,
+		APIKey: cfg.Mackerel.APIKey,
 	}
 }
 
 func (c *Client) SendMetrics(status *sesami.DeviceStatus) error {
 	log.Printf("Mackerelにメトリクスを送信中...")
-	
+
 	metrics := []Metric{
 		{
 			Name:  "sesami.battery",
@@ -50,7 +44,7 @@ func (c *Client) SendMetrics(status *sesami.DeviceStatus) error {
 	for _, metric := range metrics {
 		fmt.Printf("Mackerelにメトリクスを送信: %s = %.1f\n", metric.Name, metric.Value)
 	}
-	
+
 	log.Printf("Mackerelに%d個のメトリクスを送信しました", len(metrics))
 	return nil
 }

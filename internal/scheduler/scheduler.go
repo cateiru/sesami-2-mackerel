@@ -7,6 +7,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/cateiru/sesami-2-mackerel/internal/config"
 	"github.com/cateiru/sesami-2-mackerel/internal/mackerel"
 	"github.com/cateiru/sesami-2-mackerel/internal/sesami"
 	"github.com/robfig/cron/v3"
@@ -18,11 +19,11 @@ type Scheduler struct {
 	mackerelClient *mackerel.Client
 }
 
-func New() *Scheduler {
+func New(cfg *config.Config) *Scheduler {
 	return &Scheduler{
 		cron:           cron.New(),
-		sesamiClient:   sesami.NewClient(),
-		mackerelClient: mackerel.NewClient(),
+		sesamiClient:   sesami.NewClient(cfg),
+		mackerelClient: mackerel.NewClient(cfg),
 	}
 }
 

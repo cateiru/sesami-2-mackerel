@@ -3,7 +3,8 @@ package sesami
 import (
 	"fmt"
 	"log"
-	"os"
+
+	"github.com/cateiru/sesami-2-mackerel/internal/config"
 )
 
 type Client struct {
@@ -18,17 +19,10 @@ type DeviceStatus struct {
 	DeviceName string `json:"device_name"`
 }
 
-func NewClient() *Client {
-	apiKey := os.Getenv("SESAMI_API_KEY")
-	deviceUUID := os.Getenv("SESAMI_DEVICE_UUID")
-
-	if apiKey == "" || deviceUUID == "" {
-		log.Fatal("SESAMI_API_KEY と SESAMI_DEVICE_UUID の環境変数が設定されていません")
-	}
-
+func NewClient(cfg *config.Config) *Client {
 	return &Client{
-		APIKey:     apiKey,
-		DeviceUUID: deviceUUID,
+		APIKey:     cfg.SESAMI.APIKey,
+		DeviceUUID: cfg.SESAMI.DeviceUUID,
 	}
 }
 
