@@ -4,15 +4,20 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 )
 
 type Config struct {
 	SESAMI struct {
-		APIKey     string
-		DeviceUUID string
+		APIKey       string
+		DeviceUUID   string
+		APIUserAgent string
+		APITimeout   time.Duration
 	}
 	Mackerel struct {
-		APIKey string
+		APIKey       string
+		APIUserAgent string
+		APITimeout   time.Duration
 	}
 }
 
@@ -23,7 +28,16 @@ func Load() *Config {
 	cfg.SESAMI.DeviceUUID = getEnv("SESAMI_DEVICE_UUID", true)
 	cfg.Mackerel.APIKey = getEnv("MACKEREL_API_KEY", true)
 
-	log.Printf("設定を読み込みました: SESAMI Device UUID=%s", cfg.SESAMI.DeviceUUID)
+	cfg.SESAMI.APIUserAgent = "sesami-2-mackerel/1.0"
+	cfg.Mackerel.APIUserAgent = "sesami-2-mackerel/1.0"
+
+	cfg.SESAMI.APITimeout = 30 * time.Second
+	cfg.Mackerel.APITimeout = 30 * time.Second
+
+	if err := cfg.Validate(); err != nil {
+		log.Fatal(err)
+	}
+
 	return cfg
 }
 

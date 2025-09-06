@@ -12,8 +12,10 @@ import (
 )
 
 type Client struct {
-	APIKey     string
-	DeviceUUID string
+	APIKey       string
+	APIUserAgent string
+	APITimeout   time.Duration
+	DeviceUUID   string
 }
 
 type DeviceStatus struct {
@@ -26,8 +28,10 @@ type DeviceStatus struct {
 
 func NewClient(cfg *config.Config) *Client {
 	return &Client{
-		APIKey:     cfg.SESAMI.APIKey,
-		DeviceUUID: cfg.SESAMI.DeviceUUID,
+		APIKey:       cfg.SESAMI.APIKey,
+		APIUserAgent: cfg.SESAMI.APIUserAgent,
+		APITimeout:   cfg.SESAMI.APITimeout,
+		DeviceUUID:   cfg.SESAMI.DeviceUUID,
 	}
 }
 
@@ -40,9 +44,10 @@ func (c *Client) GetDeviceStatus() (*DeviceStatus, error) {
 	}
 
 	req.Header.Set("X-Api-Key", c.APIKey)
+	req.Header.Set("User-Agent", c.APIUserAgent)
 
 	client := &http.Client{
-		Timeout: 30 * time.Second,
+		Timeout: c.APITimeout,
 	}
 
 	resp, err := client.Do(req)
