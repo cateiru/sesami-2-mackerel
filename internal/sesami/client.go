@@ -32,9 +32,7 @@ type HistoryEntry struct {
 	Tag       string `json:"tag"`
 }
 
-type DeviceHistoryResponse struct {
-	History []HistoryEntry `json:"history"`
-}
+type DeviceHistoryResponse = []HistoryEntry
 
 func NewClient(cfg *config.Config) *Client {
 	return &Client{
@@ -130,5 +128,5 @@ func (c *Client) GetDeviceHistory() ([]HistoryEntry, error) {
 		return nil, fmt.Errorf("履歴JSON パースエラー: %w", err)
 	}
 
-	return historyResp.History, nil
+	return historyResp, nil
 }
