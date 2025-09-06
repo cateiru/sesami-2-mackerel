@@ -27,9 +27,11 @@ type DeviceStatus struct {
 }
 
 type HistoryEntry struct {
-	Type      string `json:"type"`
-	TimeStamp int64  `json:"timeStamp"`
-	Tag       string `json:"tag"`
+	Type       uint   `json:"type"`
+	TimeStamp  int64  `json:"timeStamp"`
+	HistoryTag string `json:"historyTag"`
+	RecordId   uint   `json:"recordId"`
+	Parameter  string `json:"parameter"`
 }
 
 type DeviceHistoryResponse = []HistoryEntry

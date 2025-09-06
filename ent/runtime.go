@@ -17,7 +17,7 @@ func init() {
 	devicehistoryFields := schema.DeviceHistory{}.Fields()
 	_ = devicehistoryFields
 	// devicehistoryDescCreatedAt is the schema descriptor for created_at field.
-	devicehistoryDescCreatedAt := devicehistoryFields[5].Descriptor()
+	devicehistoryDescCreatedAt := devicehistoryFields[6].Descriptor()
 	// devicehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
 	devicehistory.DefaultCreatedAt = devicehistoryDescCreatedAt.Default.(func() time.Time)
 	devicestatusFields := schema.DeviceStatus{}.Fields()

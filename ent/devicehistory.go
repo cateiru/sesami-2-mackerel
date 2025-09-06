@@ -20,13 +20,15 @@ type DeviceHistory struct {
 	// デバイスUUID
 	DeviceUUID string `json:"device_uuid,omitempty"`
 	// イベントタイプ（lock/unlock/manual_lock/manual_unlock等）
-	EventType string `json:"event_type,omitempty"`
+	EventType uint `json:"event_type,omitempty"`
 	// SESAMI APIからのタイムスタンプ
 	Timestamp int64 `json:"timestamp,omitempty"`
-	// 操作を行ったユーザーID
-	UserID string `json:"user_id,omitempty"`
-	// 操作に関連するタグ
-	Tag string `json:"tag,omitempty"`
+	// 鍵に付けられたタグやメモ 0 ~ 21bytes
+	HistoryTag string `json:"history_tag,omitempty"`
+	// 非連続（将来的には連続になる予定）、セサミデバイスが再起動するまでの履歴の一意のID、 小→大
+	RecordID uint `json:"record_id,omitempty"`
+	// Parameter holds the value of the "parameter" field.
+	Parameter string `json:"parameter,omitempty"`
 	// レコード作成日時
 	CreatedAt    time.Time `json:"created_at,omitempty"`
 	selectValues sql.SelectValues
@@ -37,9 +39,9 @@ func (*DeviceHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case devicehistory.FieldID, devicehistory.FieldTimestamp:
+		case devicehistory.FieldID, devicehistory.FieldEventType, devicehistory.FieldTimestamp, devicehistory.FieldRecordID:
 			values[i] = new(sql.NullInt64)
-		case devicehistory.FieldDeviceUUID, devicehistory.FieldEventType, devicehistory.FieldUserID, devicehistory.FieldTag:
+		case devicehistory.FieldDeviceUUID, devicehistory.FieldHistoryTag, devicehistory.FieldParameter:
 			values[i] = new(sql.NullString)
 		case devicehistory.FieldCreatedAt:
 			values[i] = new(sql.NullTime)
@@ -71,10 +73,10 @@ func (_m *DeviceHistory) assignValues(columns []string, values []any) error {
 				_m.DeviceUUID = value.String
 			}
 		case devicehistory.FieldEventType:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field event_type", values[i])
 			} else if value.Valid {
-				_m.EventType = value.String
+				_m.EventType = uint(value.Int64)
 			}
 		case devicehistory.FieldTimestamp:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -82,17 +84,23 @@ func (_m *DeviceHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Timestamp = value.Int64
 			}
-		case devicehistory.FieldUserID:
+		case devicehistory.FieldHistoryTag:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field user_id", values[i])
+				return fmt.Errorf("unexpected type %T for field history_tag", values[i])
 			} else if value.Valid {
-				_m.UserID = value.String
+				_m.HistoryTag = value.String
 			}
-		case devicehistory.FieldTag:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field tag", values[i])
+		case devicehistory.FieldRecordID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field record_id", values[i])
 			} else if value.Valid {
-				_m.Tag = value.String
+				_m.RecordID = uint(value.Int64)
+			}
+		case devicehistory.FieldParameter:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field parameter", values[i])
+			} else if value.Valid {
+				_m.Parameter = value.String
 			}
 		case devicehistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -140,16 +148,19 @@ func (_m *DeviceHistory) String() string {
 	builder.WriteString(_m.DeviceUUID)
 	builder.WriteString(", ")
 	builder.WriteString("event_type=")
-	builder.WriteString(_m.EventType)
+	builder.WriteString(fmt.Sprintf("%v", _m.EventType))
 	builder.WriteString(", ")
 	builder.WriteString("timestamp=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Timestamp))
 	builder.WriteString(", ")
-	builder.WriteString("user_id=")
-	builder.WriteString(_m.UserID)
+	builder.WriteString("history_tag=")
+	builder.WriteString(_m.HistoryTag)
 	builder.WriteString(", ")
-	builder.WriteString("tag=")
-	builder.WriteString(_m.Tag)
+	builder.WriteString("record_id=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RecordID))
+	builder.WriteString(", ")
+	builder.WriteString("parameter=")
+	builder.WriteString(_m.Parameter)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))

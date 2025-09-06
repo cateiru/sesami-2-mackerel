@@ -19,10 +19,12 @@ const (
 	FieldEventType = "event_type"
 	// FieldTimestamp holds the string denoting the timestamp field in the database.
 	FieldTimestamp = "timestamp"
-	// FieldUserID holds the string denoting the user_id field in the database.
-	FieldUserID = "user_id"
-	// FieldTag holds the string denoting the tag field in the database.
-	FieldTag = "tag"
+	// FieldHistoryTag holds the string denoting the history_tag field in the database.
+	FieldHistoryTag = "history_tag"
+	// FieldRecordID holds the string denoting the record_id field in the database.
+	FieldRecordID = "record_id"
+	// FieldParameter holds the string denoting the parameter field in the database.
+	FieldParameter = "parameter"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// Table holds the table name of the devicehistory in the database.
@@ -35,8 +37,9 @@ var Columns = []string{
 	FieldDeviceUUID,
 	FieldEventType,
 	FieldTimestamp,
-	FieldUserID,
-	FieldTag,
+	FieldHistoryTag,
+	FieldRecordID,
+	FieldParameter,
 	FieldCreatedAt,
 }
 
@@ -78,14 +81,19 @@ func ByTimestamp(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTimestamp, opts...).ToFunc()
 }
 
-// ByUserID orders the results by the user_id field.
-func ByUserID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUserID, opts...).ToFunc()
+// ByHistoryTag orders the results by the history_tag field.
+func ByHistoryTag(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHistoryTag, opts...).ToFunc()
 }
 
-// ByTag orders the results by the tag field.
-func ByTag(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTag, opts...).ToFunc()
+// ByRecordID orders the results by the record_id field.
+func ByRecordID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRecordID, opts...).ToFunc()
+}
+
+// ByParameter orders the results by the parameter field.
+func ByParameter(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldParameter, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

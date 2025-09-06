@@ -27,7 +27,7 @@ func (_c *DeviceHistoryCreate) SetDeviceUUID(v string) *DeviceHistoryCreate {
 }
 
 // SetEventType sets the "event_type" field.
-func (_c *DeviceHistoryCreate) SetEventType(v string) *DeviceHistoryCreate {
+func (_c *DeviceHistoryCreate) SetEventType(v uint) *DeviceHistoryCreate {
 	_c.mutation.SetEventType(v)
 	return _c
 }
@@ -38,31 +38,21 @@ func (_c *DeviceHistoryCreate) SetTimestamp(v int64) *DeviceHistoryCreate {
 	return _c
 }
 
-// SetUserID sets the "user_id" field.
-func (_c *DeviceHistoryCreate) SetUserID(v string) *DeviceHistoryCreate {
-	_c.mutation.SetUserID(v)
+// SetHistoryTag sets the "history_tag" field.
+func (_c *DeviceHistoryCreate) SetHistoryTag(v string) *DeviceHistoryCreate {
+	_c.mutation.SetHistoryTag(v)
 	return _c
 }
 
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_c *DeviceHistoryCreate) SetNillableUserID(v *string) *DeviceHistoryCreate {
-	if v != nil {
-		_c.SetUserID(*v)
-	}
+// SetRecordID sets the "record_id" field.
+func (_c *DeviceHistoryCreate) SetRecordID(v uint) *DeviceHistoryCreate {
+	_c.mutation.SetRecordID(v)
 	return _c
 }
 
-// SetTag sets the "tag" field.
-func (_c *DeviceHistoryCreate) SetTag(v string) *DeviceHistoryCreate {
-	_c.mutation.SetTag(v)
-	return _c
-}
-
-// SetNillableTag sets the "tag" field if the given value is not nil.
-func (_c *DeviceHistoryCreate) SetNillableTag(v *string) *DeviceHistoryCreate {
-	if v != nil {
-		_c.SetTag(*v)
-	}
+// SetParameter sets the "parameter" field.
+func (_c *DeviceHistoryCreate) SetParameter(v string) *DeviceHistoryCreate {
+	_c.mutation.SetParameter(v)
 	return _c
 }
 
@@ -132,6 +122,15 @@ func (_c *DeviceHistoryCreate) check() error {
 	if _, ok := _c.mutation.Timestamp(); !ok {
 		return &ValidationError{Name: "timestamp", err: errors.New(`ent: missing required field "DeviceHistory.timestamp"`)}
 	}
+	if _, ok := _c.mutation.HistoryTag(); !ok {
+		return &ValidationError{Name: "history_tag", err: errors.New(`ent: missing required field "DeviceHistory.history_tag"`)}
+	}
+	if _, ok := _c.mutation.RecordID(); !ok {
+		return &ValidationError{Name: "record_id", err: errors.New(`ent: missing required field "DeviceHistory.record_id"`)}
+	}
+	if _, ok := _c.mutation.Parameter(); !ok {
+		return &ValidationError{Name: "parameter", err: errors.New(`ent: missing required field "DeviceHistory.parameter"`)}
+	}
 	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "DeviceHistory.created_at"`)}
 	}
@@ -166,20 +165,24 @@ func (_c *DeviceHistoryCreate) createSpec() (*DeviceHistory, *sqlgraph.CreateSpe
 		_node.DeviceUUID = value
 	}
 	if value, ok := _c.mutation.EventType(); ok {
-		_spec.SetField(devicehistory.FieldEventType, field.TypeString, value)
+		_spec.SetField(devicehistory.FieldEventType, field.TypeUint, value)
 		_node.EventType = value
 	}
 	if value, ok := _c.mutation.Timestamp(); ok {
 		_spec.SetField(devicehistory.FieldTimestamp, field.TypeInt64, value)
 		_node.Timestamp = value
 	}
-	if value, ok := _c.mutation.UserID(); ok {
-		_spec.SetField(devicehistory.FieldUserID, field.TypeString, value)
-		_node.UserID = value
+	if value, ok := _c.mutation.HistoryTag(); ok {
+		_spec.SetField(devicehistory.FieldHistoryTag, field.TypeString, value)
+		_node.HistoryTag = value
 	}
-	if value, ok := _c.mutation.Tag(); ok {
-		_spec.SetField(devicehistory.FieldTag, field.TypeString, value)
-		_node.Tag = value
+	if value, ok := _c.mutation.RecordID(); ok {
+		_spec.SetField(devicehistory.FieldRecordID, field.TypeUint, value)
+		_node.RecordID = value
+	}
+	if value, ok := _c.mutation.Parameter(); ok {
+		_spec.SetField(devicehistory.FieldParameter, field.TypeString, value)
+		_node.Parameter = value
 	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(devicehistory.FieldCreatedAt, field.TypeTime, value)

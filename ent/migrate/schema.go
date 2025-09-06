@@ -12,10 +12,11 @@ var (
 	DeviceHistoriesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "device_uuid", Type: field.TypeString},
-		{Name: "event_type", Type: field.TypeString},
+		{Name: "event_type", Type: field.TypeUint},
 		{Name: "timestamp", Type: field.TypeInt64},
-		{Name: "user_id", Type: field.TypeString, Nullable: true},
-		{Name: "tag", Type: field.TypeString, Nullable: true},
+		{Name: "history_tag", Type: field.TypeString},
+		{Name: "record_id", Type: field.TypeUint},
+		{Name: "parameter", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime},
 	}
 	// DeviceHistoriesTable holds the schema information for the "device_histories" table.

@@ -60,7 +60,7 @@ func DeviceUUID(v string) predicate.DeviceHistory {
 }
 
 // EventType applies equality check predicate on the "event_type" field. It's identical to EventTypeEQ.
-func EventType(v string) predicate.DeviceHistory {
+func EventType(v uint) predicate.DeviceHistory {
 	return predicate.DeviceHistory(sql.FieldEQ(FieldEventType, v))
 }
 
@@ -69,14 +69,19 @@ func Timestamp(v int64) predicate.DeviceHistory {
 	return predicate.DeviceHistory(sql.FieldEQ(FieldTimestamp, v))
 }
 
-// UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
-func UserID(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldEQ(FieldUserID, v))
+// HistoryTag applies equality check predicate on the "history_tag" field. It's identical to HistoryTagEQ.
+func HistoryTag(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldEQ(FieldHistoryTag, v))
 }
 
-// Tag applies equality check predicate on the "tag" field. It's identical to TagEQ.
-func Tag(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldEQ(FieldTag, v))
+// RecordID applies equality check predicate on the "record_id" field. It's identical to RecordIDEQ.
+func RecordID(v uint) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldEQ(FieldRecordID, v))
+}
+
+// Parameter applies equality check predicate on the "parameter" field. It's identical to ParameterEQ.
+func Parameter(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldEQ(FieldParameter, v))
 }
 
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
@@ -150,68 +155,43 @@ func DeviceUUIDContainsFold(v string) predicate.DeviceHistory {
 }
 
 // EventTypeEQ applies the EQ predicate on the "event_type" field.
-func EventTypeEQ(v string) predicate.DeviceHistory {
+func EventTypeEQ(v uint) predicate.DeviceHistory {
 	return predicate.DeviceHistory(sql.FieldEQ(FieldEventType, v))
 }
 
 // EventTypeNEQ applies the NEQ predicate on the "event_type" field.
-func EventTypeNEQ(v string) predicate.DeviceHistory {
+func EventTypeNEQ(v uint) predicate.DeviceHistory {
 	return predicate.DeviceHistory(sql.FieldNEQ(FieldEventType, v))
 }
 
 // EventTypeIn applies the In predicate on the "event_type" field.
-func EventTypeIn(vs ...string) predicate.DeviceHistory {
+func EventTypeIn(vs ...uint) predicate.DeviceHistory {
 	return predicate.DeviceHistory(sql.FieldIn(FieldEventType, vs...))
 }
 
 // EventTypeNotIn applies the NotIn predicate on the "event_type" field.
-func EventTypeNotIn(vs ...string) predicate.DeviceHistory {
+func EventTypeNotIn(vs ...uint) predicate.DeviceHistory {
 	return predicate.DeviceHistory(sql.FieldNotIn(FieldEventType, vs...))
 }
 
 // EventTypeGT applies the GT predicate on the "event_type" field.
-func EventTypeGT(v string) predicate.DeviceHistory {
+func EventTypeGT(v uint) predicate.DeviceHistory {
 	return predicate.DeviceHistory(sql.FieldGT(FieldEventType, v))
 }
 
 // EventTypeGTE applies the GTE predicate on the "event_type" field.
-func EventTypeGTE(v string) predicate.DeviceHistory {
+func EventTypeGTE(v uint) predicate.DeviceHistory {
 	return predicate.DeviceHistory(sql.FieldGTE(FieldEventType, v))
 }
 
 // EventTypeLT applies the LT predicate on the "event_type" field.
-func EventTypeLT(v string) predicate.DeviceHistory {
+func EventTypeLT(v uint) predicate.DeviceHistory {
 	return predicate.DeviceHistory(sql.FieldLT(FieldEventType, v))
 }
 
 // EventTypeLTE applies the LTE predicate on the "event_type" field.
-func EventTypeLTE(v string) predicate.DeviceHistory {
+func EventTypeLTE(v uint) predicate.DeviceHistory {
 	return predicate.DeviceHistory(sql.FieldLTE(FieldEventType, v))
-}
-
-// EventTypeContains applies the Contains predicate on the "event_type" field.
-func EventTypeContains(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldContains(FieldEventType, v))
-}
-
-// EventTypeHasPrefix applies the HasPrefix predicate on the "event_type" field.
-func EventTypeHasPrefix(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldHasPrefix(FieldEventType, v))
-}
-
-// EventTypeHasSuffix applies the HasSuffix predicate on the "event_type" field.
-func EventTypeHasSuffix(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldHasSuffix(FieldEventType, v))
-}
-
-// EventTypeEqualFold applies the EqualFold predicate on the "event_type" field.
-func EventTypeEqualFold(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldEqualFold(FieldEventType, v))
-}
-
-// EventTypeContainsFold applies the ContainsFold predicate on the "event_type" field.
-func EventTypeContainsFold(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldContainsFold(FieldEventType, v))
 }
 
 // TimestampEQ applies the EQ predicate on the "timestamp" field.
@@ -254,154 +234,174 @@ func TimestampLTE(v int64) predicate.DeviceHistory {
 	return predicate.DeviceHistory(sql.FieldLTE(FieldTimestamp, v))
 }
 
-// UserIDEQ applies the EQ predicate on the "user_id" field.
-func UserIDEQ(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldEQ(FieldUserID, v))
+// HistoryTagEQ applies the EQ predicate on the "history_tag" field.
+func HistoryTagEQ(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldEQ(FieldHistoryTag, v))
 }
 
-// UserIDNEQ applies the NEQ predicate on the "user_id" field.
-func UserIDNEQ(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldNEQ(FieldUserID, v))
+// HistoryTagNEQ applies the NEQ predicate on the "history_tag" field.
+func HistoryTagNEQ(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldNEQ(FieldHistoryTag, v))
 }
 
-// UserIDIn applies the In predicate on the "user_id" field.
-func UserIDIn(vs ...string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldIn(FieldUserID, vs...))
+// HistoryTagIn applies the In predicate on the "history_tag" field.
+func HistoryTagIn(vs ...string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldIn(FieldHistoryTag, vs...))
 }
 
-// UserIDNotIn applies the NotIn predicate on the "user_id" field.
-func UserIDNotIn(vs ...string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldNotIn(FieldUserID, vs...))
+// HistoryTagNotIn applies the NotIn predicate on the "history_tag" field.
+func HistoryTagNotIn(vs ...string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldNotIn(FieldHistoryTag, vs...))
 }
 
-// UserIDGT applies the GT predicate on the "user_id" field.
-func UserIDGT(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldGT(FieldUserID, v))
+// HistoryTagGT applies the GT predicate on the "history_tag" field.
+func HistoryTagGT(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldGT(FieldHistoryTag, v))
 }
 
-// UserIDGTE applies the GTE predicate on the "user_id" field.
-func UserIDGTE(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldGTE(FieldUserID, v))
+// HistoryTagGTE applies the GTE predicate on the "history_tag" field.
+func HistoryTagGTE(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldGTE(FieldHistoryTag, v))
 }
 
-// UserIDLT applies the LT predicate on the "user_id" field.
-func UserIDLT(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldLT(FieldUserID, v))
+// HistoryTagLT applies the LT predicate on the "history_tag" field.
+func HistoryTagLT(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldLT(FieldHistoryTag, v))
 }
 
-// UserIDLTE applies the LTE predicate on the "user_id" field.
-func UserIDLTE(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldLTE(FieldUserID, v))
+// HistoryTagLTE applies the LTE predicate on the "history_tag" field.
+func HistoryTagLTE(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldLTE(FieldHistoryTag, v))
 }
 
-// UserIDContains applies the Contains predicate on the "user_id" field.
-func UserIDContains(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldContains(FieldUserID, v))
+// HistoryTagContains applies the Contains predicate on the "history_tag" field.
+func HistoryTagContains(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldContains(FieldHistoryTag, v))
 }
 
-// UserIDHasPrefix applies the HasPrefix predicate on the "user_id" field.
-func UserIDHasPrefix(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldHasPrefix(FieldUserID, v))
+// HistoryTagHasPrefix applies the HasPrefix predicate on the "history_tag" field.
+func HistoryTagHasPrefix(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldHasPrefix(FieldHistoryTag, v))
 }
 
-// UserIDHasSuffix applies the HasSuffix predicate on the "user_id" field.
-func UserIDHasSuffix(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldHasSuffix(FieldUserID, v))
+// HistoryTagHasSuffix applies the HasSuffix predicate on the "history_tag" field.
+func HistoryTagHasSuffix(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldHasSuffix(FieldHistoryTag, v))
 }
 
-// UserIDIsNil applies the IsNil predicate on the "user_id" field.
-func UserIDIsNil() predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldIsNull(FieldUserID))
+// HistoryTagEqualFold applies the EqualFold predicate on the "history_tag" field.
+func HistoryTagEqualFold(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldEqualFold(FieldHistoryTag, v))
 }
 
-// UserIDNotNil applies the NotNil predicate on the "user_id" field.
-func UserIDNotNil() predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldNotNull(FieldUserID))
+// HistoryTagContainsFold applies the ContainsFold predicate on the "history_tag" field.
+func HistoryTagContainsFold(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldContainsFold(FieldHistoryTag, v))
 }
 
-// UserIDEqualFold applies the EqualFold predicate on the "user_id" field.
-func UserIDEqualFold(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldEqualFold(FieldUserID, v))
+// RecordIDEQ applies the EQ predicate on the "record_id" field.
+func RecordIDEQ(v uint) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldEQ(FieldRecordID, v))
 }
 
-// UserIDContainsFold applies the ContainsFold predicate on the "user_id" field.
-func UserIDContainsFold(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldContainsFold(FieldUserID, v))
+// RecordIDNEQ applies the NEQ predicate on the "record_id" field.
+func RecordIDNEQ(v uint) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldNEQ(FieldRecordID, v))
 }
 
-// TagEQ applies the EQ predicate on the "tag" field.
-func TagEQ(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldEQ(FieldTag, v))
+// RecordIDIn applies the In predicate on the "record_id" field.
+func RecordIDIn(vs ...uint) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldIn(FieldRecordID, vs...))
 }
 
-// TagNEQ applies the NEQ predicate on the "tag" field.
-func TagNEQ(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldNEQ(FieldTag, v))
+// RecordIDNotIn applies the NotIn predicate on the "record_id" field.
+func RecordIDNotIn(vs ...uint) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldNotIn(FieldRecordID, vs...))
 }
 
-// TagIn applies the In predicate on the "tag" field.
-func TagIn(vs ...string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldIn(FieldTag, vs...))
+// RecordIDGT applies the GT predicate on the "record_id" field.
+func RecordIDGT(v uint) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldGT(FieldRecordID, v))
 }
 
-// TagNotIn applies the NotIn predicate on the "tag" field.
-func TagNotIn(vs ...string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldNotIn(FieldTag, vs...))
+// RecordIDGTE applies the GTE predicate on the "record_id" field.
+func RecordIDGTE(v uint) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldGTE(FieldRecordID, v))
 }
 
-// TagGT applies the GT predicate on the "tag" field.
-func TagGT(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldGT(FieldTag, v))
+// RecordIDLT applies the LT predicate on the "record_id" field.
+func RecordIDLT(v uint) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldLT(FieldRecordID, v))
 }
 
-// TagGTE applies the GTE predicate on the "tag" field.
-func TagGTE(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldGTE(FieldTag, v))
+// RecordIDLTE applies the LTE predicate on the "record_id" field.
+func RecordIDLTE(v uint) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldLTE(FieldRecordID, v))
 }
 
-// TagLT applies the LT predicate on the "tag" field.
-func TagLT(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldLT(FieldTag, v))
+// ParameterEQ applies the EQ predicate on the "parameter" field.
+func ParameterEQ(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldEQ(FieldParameter, v))
 }
 
-// TagLTE applies the LTE predicate on the "tag" field.
-func TagLTE(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldLTE(FieldTag, v))
+// ParameterNEQ applies the NEQ predicate on the "parameter" field.
+func ParameterNEQ(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldNEQ(FieldParameter, v))
 }
 
-// TagContains applies the Contains predicate on the "tag" field.
-func TagContains(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldContains(FieldTag, v))
+// ParameterIn applies the In predicate on the "parameter" field.
+func ParameterIn(vs ...string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldIn(FieldParameter, vs...))
 }
 
-// TagHasPrefix applies the HasPrefix predicate on the "tag" field.
-func TagHasPrefix(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldHasPrefix(FieldTag, v))
+// ParameterNotIn applies the NotIn predicate on the "parameter" field.
+func ParameterNotIn(vs ...string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldNotIn(FieldParameter, vs...))
 }
 
-// TagHasSuffix applies the HasSuffix predicate on the "tag" field.
-func TagHasSuffix(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldHasSuffix(FieldTag, v))
+// ParameterGT applies the GT predicate on the "parameter" field.
+func ParameterGT(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldGT(FieldParameter, v))
 }
 
-// TagIsNil applies the IsNil predicate on the "tag" field.
-func TagIsNil() predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldIsNull(FieldTag))
+// ParameterGTE applies the GTE predicate on the "parameter" field.
+func ParameterGTE(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldGTE(FieldParameter, v))
 }
 
-// TagNotNil applies the NotNil predicate on the "tag" field.
-func TagNotNil() predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldNotNull(FieldTag))
+// ParameterLT applies the LT predicate on the "parameter" field.
+func ParameterLT(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldLT(FieldParameter, v))
 }
 
-// TagEqualFold applies the EqualFold predicate on the "tag" field.
-func TagEqualFold(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldEqualFold(FieldTag, v))
+// ParameterLTE applies the LTE predicate on the "parameter" field.
+func ParameterLTE(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldLTE(FieldParameter, v))
 }
 
-// TagContainsFold applies the ContainsFold predicate on the "tag" field.
-func TagContainsFold(v string) predicate.DeviceHistory {
-	return predicate.DeviceHistory(sql.FieldContainsFold(FieldTag, v))
+// ParameterContains applies the Contains predicate on the "parameter" field.
+func ParameterContains(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldContains(FieldParameter, v))
+}
+
+// ParameterHasPrefix applies the HasPrefix predicate on the "parameter" field.
+func ParameterHasPrefix(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldHasPrefix(FieldParameter, v))
+}
+
+// ParameterHasSuffix applies the HasSuffix predicate on the "parameter" field.
+func ParameterHasSuffix(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldHasSuffix(FieldParameter, v))
+}
+
+// ParameterEqualFold applies the EqualFold predicate on the "parameter" field.
+func ParameterEqualFold(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldEqualFold(FieldParameter, v))
+}
+
+// ParameterContainsFold applies the ContainsFold predicate on the "parameter" field.
+func ParameterContainsFold(v string) predicate.DeviceHistory {
+	return predicate.DeviceHistory(sql.FieldContainsFold(FieldParameter, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

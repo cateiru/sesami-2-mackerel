@@ -75,8 +75,7 @@ func (c *Client) InsertDeviceHistory(deviceUUID string, history []sesami.History
 			Query().
 			Where(
 				devicehistory.DeviceUUID(deviceUUID),
-				devicehistory.Timestamp(entry.TimeStamp),
-				devicehistory.EventType(entry.Type),
+				devicehistory.RecordID(entry.RecordId),
 			).
 			Exist(context.Background())
 
@@ -93,7 +92,9 @@ func (c *Client) InsertDeviceHistory(deviceUUID string, history []sesami.History
 			SetDeviceUUID(deviceUUID).
 			SetEventType(entry.Type).
 			SetTimestamp(entry.TimeStamp).
-			SetTag(entry.Tag).
+			SetHistoryTag(entry.HistoryTag).
+			SetRecordID(entry.RecordId).
+			SetParameter(entry.Parameter).
 			Save(context.Background())
 
 		if err != nil {

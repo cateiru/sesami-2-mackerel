@@ -43,16 +43,23 @@ func (_u *DeviceHistoryUpdate) SetNillableDeviceUUID(v *string) *DeviceHistoryUp
 }
 
 // SetEventType sets the "event_type" field.
-func (_u *DeviceHistoryUpdate) SetEventType(v string) *DeviceHistoryUpdate {
+func (_u *DeviceHistoryUpdate) SetEventType(v uint) *DeviceHistoryUpdate {
+	_u.mutation.ResetEventType()
 	_u.mutation.SetEventType(v)
 	return _u
 }
 
 // SetNillableEventType sets the "event_type" field if the given value is not nil.
-func (_u *DeviceHistoryUpdate) SetNillableEventType(v *string) *DeviceHistoryUpdate {
+func (_u *DeviceHistoryUpdate) SetNillableEventType(v *uint) *DeviceHistoryUpdate {
 	if v != nil {
 		_u.SetEventType(*v)
 	}
+	return _u
+}
+
+// AddEventType adds value to the "event_type" field.
+func (_u *DeviceHistoryUpdate) AddEventType(v int) *DeviceHistoryUpdate {
+	_u.mutation.AddEventType(v)
 	return _u
 }
 
@@ -77,43 +84,52 @@ func (_u *DeviceHistoryUpdate) AddTimestamp(v int64) *DeviceHistoryUpdate {
 	return _u
 }
 
-// SetUserID sets the "user_id" field.
-func (_u *DeviceHistoryUpdate) SetUserID(v string) *DeviceHistoryUpdate {
-	_u.mutation.SetUserID(v)
+// SetHistoryTag sets the "history_tag" field.
+func (_u *DeviceHistoryUpdate) SetHistoryTag(v string) *DeviceHistoryUpdate {
+	_u.mutation.SetHistoryTag(v)
 	return _u
 }
 
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *DeviceHistoryUpdate) SetNillableUserID(v *string) *DeviceHistoryUpdate {
+// SetNillableHistoryTag sets the "history_tag" field if the given value is not nil.
+func (_u *DeviceHistoryUpdate) SetNillableHistoryTag(v *string) *DeviceHistoryUpdate {
 	if v != nil {
-		_u.SetUserID(*v)
+		_u.SetHistoryTag(*v)
 	}
 	return _u
 }
 
-// ClearUserID clears the value of the "user_id" field.
-func (_u *DeviceHistoryUpdate) ClearUserID() *DeviceHistoryUpdate {
-	_u.mutation.ClearUserID()
+// SetRecordID sets the "record_id" field.
+func (_u *DeviceHistoryUpdate) SetRecordID(v uint) *DeviceHistoryUpdate {
+	_u.mutation.ResetRecordID()
+	_u.mutation.SetRecordID(v)
 	return _u
 }
 
-// SetTag sets the "tag" field.
-func (_u *DeviceHistoryUpdate) SetTag(v string) *DeviceHistoryUpdate {
-	_u.mutation.SetTag(v)
-	return _u
-}
-
-// SetNillableTag sets the "tag" field if the given value is not nil.
-func (_u *DeviceHistoryUpdate) SetNillableTag(v *string) *DeviceHistoryUpdate {
+// SetNillableRecordID sets the "record_id" field if the given value is not nil.
+func (_u *DeviceHistoryUpdate) SetNillableRecordID(v *uint) *DeviceHistoryUpdate {
 	if v != nil {
-		_u.SetTag(*v)
+		_u.SetRecordID(*v)
 	}
 	return _u
 }
 
-// ClearTag clears the value of the "tag" field.
-func (_u *DeviceHistoryUpdate) ClearTag() *DeviceHistoryUpdate {
-	_u.mutation.ClearTag()
+// AddRecordID adds value to the "record_id" field.
+func (_u *DeviceHistoryUpdate) AddRecordID(v int) *DeviceHistoryUpdate {
+	_u.mutation.AddRecordID(v)
+	return _u
+}
+
+// SetParameter sets the "parameter" field.
+func (_u *DeviceHistoryUpdate) SetParameter(v string) *DeviceHistoryUpdate {
+	_u.mutation.SetParameter(v)
+	return _u
+}
+
+// SetNillableParameter sets the "parameter" field if the given value is not nil.
+func (_u *DeviceHistoryUpdate) SetNillableParameter(v *string) *DeviceHistoryUpdate {
+	if v != nil {
+		_u.SetParameter(*v)
+	}
 	return _u
 }
 
@@ -176,7 +192,10 @@ func (_u *DeviceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 		_spec.SetField(devicehistory.FieldDeviceUUID, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.EventType(); ok {
-		_spec.SetField(devicehistory.FieldEventType, field.TypeString, value)
+		_spec.SetField(devicehistory.FieldEventType, field.TypeUint, value)
+	}
+	if value, ok := _u.mutation.AddedEventType(); ok {
+		_spec.AddField(devicehistory.FieldEventType, field.TypeUint, value)
 	}
 	if value, ok := _u.mutation.Timestamp(); ok {
 		_spec.SetField(devicehistory.FieldTimestamp, field.TypeInt64, value)
@@ -184,17 +203,17 @@ func (_u *DeviceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if value, ok := _u.mutation.AddedTimestamp(); ok {
 		_spec.AddField(devicehistory.FieldTimestamp, field.TypeInt64, value)
 	}
-	if value, ok := _u.mutation.UserID(); ok {
-		_spec.SetField(devicehistory.FieldUserID, field.TypeString, value)
+	if value, ok := _u.mutation.HistoryTag(); ok {
+		_spec.SetField(devicehistory.FieldHistoryTag, field.TypeString, value)
 	}
-	if _u.mutation.UserIDCleared() {
-		_spec.ClearField(devicehistory.FieldUserID, field.TypeString)
+	if value, ok := _u.mutation.RecordID(); ok {
+		_spec.SetField(devicehistory.FieldRecordID, field.TypeUint, value)
 	}
-	if value, ok := _u.mutation.Tag(); ok {
-		_spec.SetField(devicehistory.FieldTag, field.TypeString, value)
+	if value, ok := _u.mutation.AddedRecordID(); ok {
+		_spec.AddField(devicehistory.FieldRecordID, field.TypeUint, value)
 	}
-	if _u.mutation.TagCleared() {
-		_spec.ClearField(devicehistory.FieldTag, field.TypeString)
+	if value, ok := _u.mutation.Parameter(); ok {
+		_spec.SetField(devicehistory.FieldParameter, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(devicehistory.FieldCreatedAt, field.TypeTime, value)
@@ -234,16 +253,23 @@ func (_u *DeviceHistoryUpdateOne) SetNillableDeviceUUID(v *string) *DeviceHistor
 }
 
 // SetEventType sets the "event_type" field.
-func (_u *DeviceHistoryUpdateOne) SetEventType(v string) *DeviceHistoryUpdateOne {
+func (_u *DeviceHistoryUpdateOne) SetEventType(v uint) *DeviceHistoryUpdateOne {
+	_u.mutation.ResetEventType()
 	_u.mutation.SetEventType(v)
 	return _u
 }
 
 // SetNillableEventType sets the "event_type" field if the given value is not nil.
-func (_u *DeviceHistoryUpdateOne) SetNillableEventType(v *string) *DeviceHistoryUpdateOne {
+func (_u *DeviceHistoryUpdateOne) SetNillableEventType(v *uint) *DeviceHistoryUpdateOne {
 	if v != nil {
 		_u.SetEventType(*v)
 	}
+	return _u
+}
+
+// AddEventType adds value to the "event_type" field.
+func (_u *DeviceHistoryUpdateOne) AddEventType(v int) *DeviceHistoryUpdateOne {
+	_u.mutation.AddEventType(v)
 	return _u
 }
 
@@ -268,43 +294,52 @@ func (_u *DeviceHistoryUpdateOne) AddTimestamp(v int64) *DeviceHistoryUpdateOne 
 	return _u
 }
 
-// SetUserID sets the "user_id" field.
-func (_u *DeviceHistoryUpdateOne) SetUserID(v string) *DeviceHistoryUpdateOne {
-	_u.mutation.SetUserID(v)
+// SetHistoryTag sets the "history_tag" field.
+func (_u *DeviceHistoryUpdateOne) SetHistoryTag(v string) *DeviceHistoryUpdateOne {
+	_u.mutation.SetHistoryTag(v)
 	return _u
 }
 
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *DeviceHistoryUpdateOne) SetNillableUserID(v *string) *DeviceHistoryUpdateOne {
+// SetNillableHistoryTag sets the "history_tag" field if the given value is not nil.
+func (_u *DeviceHistoryUpdateOne) SetNillableHistoryTag(v *string) *DeviceHistoryUpdateOne {
 	if v != nil {
-		_u.SetUserID(*v)
+		_u.SetHistoryTag(*v)
 	}
 	return _u
 }
 
-// ClearUserID clears the value of the "user_id" field.
-func (_u *DeviceHistoryUpdateOne) ClearUserID() *DeviceHistoryUpdateOne {
-	_u.mutation.ClearUserID()
+// SetRecordID sets the "record_id" field.
+func (_u *DeviceHistoryUpdateOne) SetRecordID(v uint) *DeviceHistoryUpdateOne {
+	_u.mutation.ResetRecordID()
+	_u.mutation.SetRecordID(v)
 	return _u
 }
 
-// SetTag sets the "tag" field.
-func (_u *DeviceHistoryUpdateOne) SetTag(v string) *DeviceHistoryUpdateOne {
-	_u.mutation.SetTag(v)
-	return _u
-}
-
-// SetNillableTag sets the "tag" field if the given value is not nil.
-func (_u *DeviceHistoryUpdateOne) SetNillableTag(v *string) *DeviceHistoryUpdateOne {
+// SetNillableRecordID sets the "record_id" field if the given value is not nil.
+func (_u *DeviceHistoryUpdateOne) SetNillableRecordID(v *uint) *DeviceHistoryUpdateOne {
 	if v != nil {
-		_u.SetTag(*v)
+		_u.SetRecordID(*v)
 	}
 	return _u
 }
 
-// ClearTag clears the value of the "tag" field.
-func (_u *DeviceHistoryUpdateOne) ClearTag() *DeviceHistoryUpdateOne {
-	_u.mutation.ClearTag()
+// AddRecordID adds value to the "record_id" field.
+func (_u *DeviceHistoryUpdateOne) AddRecordID(v int) *DeviceHistoryUpdateOne {
+	_u.mutation.AddRecordID(v)
+	return _u
+}
+
+// SetParameter sets the "parameter" field.
+func (_u *DeviceHistoryUpdateOne) SetParameter(v string) *DeviceHistoryUpdateOne {
+	_u.mutation.SetParameter(v)
+	return _u
+}
+
+// SetNillableParameter sets the "parameter" field if the given value is not nil.
+func (_u *DeviceHistoryUpdateOne) SetNillableParameter(v *string) *DeviceHistoryUpdateOne {
+	if v != nil {
+		_u.SetParameter(*v)
+	}
 	return _u
 }
 
@@ -397,7 +432,10 @@ func (_u *DeviceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *DeviceHis
 		_spec.SetField(devicehistory.FieldDeviceUUID, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.EventType(); ok {
-		_spec.SetField(devicehistory.FieldEventType, field.TypeString, value)
+		_spec.SetField(devicehistory.FieldEventType, field.TypeUint, value)
+	}
+	if value, ok := _u.mutation.AddedEventType(); ok {
+		_spec.AddField(devicehistory.FieldEventType, field.TypeUint, value)
 	}
 	if value, ok := _u.mutation.Timestamp(); ok {
 		_spec.SetField(devicehistory.FieldTimestamp, field.TypeInt64, value)
@@ -405,17 +443,17 @@ func (_u *DeviceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *DeviceHis
 	if value, ok := _u.mutation.AddedTimestamp(); ok {
 		_spec.AddField(devicehistory.FieldTimestamp, field.TypeInt64, value)
 	}
-	if value, ok := _u.mutation.UserID(); ok {
-		_spec.SetField(devicehistory.FieldUserID, field.TypeString, value)
+	if value, ok := _u.mutation.HistoryTag(); ok {
+		_spec.SetField(devicehistory.FieldHistoryTag, field.TypeString, value)
 	}
-	if _u.mutation.UserIDCleared() {
-		_spec.ClearField(devicehistory.FieldUserID, field.TypeString)
+	if value, ok := _u.mutation.RecordID(); ok {
+		_spec.SetField(devicehistory.FieldRecordID, field.TypeUint, value)
 	}
-	if value, ok := _u.mutation.Tag(); ok {
-		_spec.SetField(devicehistory.FieldTag, field.TypeString, value)
+	if value, ok := _u.mutation.AddedRecordID(); ok {
+		_spec.AddField(devicehistory.FieldRecordID, field.TypeUint, value)
 	}
-	if _u.mutation.TagCleared() {
-		_spec.ClearField(devicehistory.FieldTag, field.TypeString)
+	if value, ok := _u.mutation.Parameter(); ok {
+		_spec.SetField(devicehistory.FieldParameter, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(devicehistory.FieldCreatedAt, field.TypeTime, value)
