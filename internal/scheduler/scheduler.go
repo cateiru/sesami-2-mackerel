@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/cateiru/sesami-2-mackerel/internal/config"
+	"github.com/cateiru/sesami-2-mackerel/internal/database"
 	"github.com/cateiru/sesami-2-mackerel/internal/mackerel"
 	"github.com/cateiru/sesami-2-mackerel/internal/sesami"
 	"github.com/robfig/cron/v3"
@@ -17,14 +18,21 @@ type Scheduler struct {
 	cron           *cron.Cron
 	sesamiClient   *sesami.Client
 	mackerelClient *mackerel.Client
+	dbClient       *database.Client
 }
 
-func New(cfg *config.Config) *Scheduler {
+func New(cfg *config.Config) (*Scheduler, error) {
+	dbClient, err := database.NewClient(cfg.Database.Path)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Scheduler{
 		cron:           cron.New(),
 		sesamiClient:   sesami.NewClient(cfg),
 		mackerelClient: mackerel.NewClient(cfg),
-	}
+		dbClient:       dbClient,
+	}, nil
 }
 
 func (s *Scheduler) Start() {
@@ -44,6 +52,11 @@ func (s *Scheduler) Start() {
 func (s *Scheduler) Stop() {
 	log.Println("プログラムを終了します...")
 	s.cron.Stop()
+	if s.dbClient != nil {
+		if err := s.dbClient.Close(); err != nil {
+			log.Printf("データベース接続クローズエラー: %v", err)
+		}
+	}
 }
 
 func (s *Scheduler) dailyTask() {
@@ -53,6 +66,13 @@ func (s *Scheduler) dailyTask() {
 	if err != nil {
 		log.Printf("SESAMI API呼び出しエラー: %v", err)
 		return
+	}
+
+	err = s.dbClient.InsertDeviceStatus(status)
+	if err != nil {
+		log.Printf("データベース保存エラー: %v", err)
+	} else {
+		log.Println("デバイスステータスをデータベースに保存しました")
 	}
 
 	err = s.mackerelClient.SendMetrics(status)

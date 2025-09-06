@@ -19,6 +19,9 @@ type Config struct {
 		APIUserAgent string
 		APITimeout   time.Duration
 	}
+	Database struct {
+		Path string
+	}
 }
 
 func Load() *Config {
@@ -33,6 +36,11 @@ func Load() *Config {
 
 	cfg.SESAMI.APITimeout = 30 * time.Second
 	cfg.Mackerel.APITimeout = 30 * time.Second
+
+	cfg.Database.Path = getEnv("DATABASE_PATH", false)
+	if cfg.Database.Path == "" {
+		cfg.Database.Path = "sesami_device_status.db"
+	}
 
 	if err := cfg.Validate(); err != nil {
 		log.Fatal(err)

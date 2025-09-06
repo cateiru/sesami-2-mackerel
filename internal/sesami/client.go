@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"time"
 
@@ -70,16 +69,5 @@ func (c *Client) GetDeviceStatus() (*DeviceStatus, error) {
 		return nil, fmt.Errorf("JSON パースエラー: %w", err)
 	}
 
-	log.Printf("SESAMI APIから状態を取得しました: Battery=%d%%, Status=%s",
-		status.BatteryPercentage, status.CHSesame2Status)
-
 	return &status, nil
-}
-
-func (s *DeviceStatus) GetBattery() int {
-	return s.BatteryPercentage
-}
-
-func (s *DeviceStatus) IsLocked() bool {
-	return s.CHSesame2Status == "locked"
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/cateiru/sesami-2-mackerel/internal/config"
 	"github.com/cateiru/sesami-2-mackerel/internal/scheduler"
@@ -12,6 +13,9 @@ func main() {
 
 	cfg := config.Load()
 
-	s := scheduler.New(cfg)
+	s, err := scheduler.New(cfg)
+	if err != nil {
+		log.Fatalf("スケジューラー初期化エラー: %v", err)
+	}
 	s.Start()
 }
