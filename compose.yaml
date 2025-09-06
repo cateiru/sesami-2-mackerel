@@ -1,0 +1,11 @@
+services:
+  sesami-2-mackerel:
+    build: .
+    container_name: sesami-2-mackerel
+    environment:
+      - SESAMI_API_KEY=${SESAMI_API_KEY}
+      - SESAMI_DEVICE_UUID=${SESAMI_DEVICE_UUID}
+      - MACKEREL_API_KEY=${MACKEREL_API_KEY}
+    env_file:
+      - .env
+    restart: unless-stopped
