@@ -83,18 +83,19 @@ func (s *Scheduler) dailyTask() {
 		log.Printf("データベース保存エラー: %v", err)
 	}
 
-	history, err := s.sesamiClient.GetDeviceHistory()
-	if err != nil {
-		log.Printf("SESAMI履歴取得エラー: %v", err)
-	} else {
-		deviceUUID := s.sesamiClient.DeviceUUID
-		err = s.dbClient.InsertDeviceHistory(deviceUUID, history)
-		if err != nil {
-			log.Printf("履歴データベース保存エラー: %v", err)
-		} else {
-			log.Printf("履歴データを%d件保存しました", len(history))
-		}
-	}
+	// MEMO: status の解析をしなければいけないので一旦取得しない
+	// history, err := s.sesamiClient.GetDeviceHistory()
+	// if err != nil {
+	// 	log.Printf("SESAMI履歴取得エラー: %v", err)
+	// } else {
+	// 	deviceUUID := s.sesamiClient.DeviceUUID
+	// 	err = s.dbClient.InsertDeviceHistory(deviceUUID, history)
+	// 	if err != nil {
+	// 		log.Printf("履歴データベース保存エラー: %v", err)
+	// 	} else {
+	// 		log.Printf("履歴データを%d件保存しました", len(history))
+	// 	}
+	// }
 
 	err = s.mackerelClient.SendMetrics(status, s.mackerelServiceName)
 	if err != nil {

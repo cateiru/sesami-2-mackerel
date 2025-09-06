@@ -2,6 +2,11 @@
 
 [SESAMI](https://jp.candyhouse.co/) のデバイスを [Mackerel](https://mackerel.io/) で監視するためのツールです。
 
+## 取得する情報
+
+- SESAMIデバイスのバッテリー残量（%）
+- ~~SESAMIの操作履歴~~（将来的に対応予定）
+
 ## Usage
 
 ### 以下の環境変数を設定した `.env` ファイルを作成してください
