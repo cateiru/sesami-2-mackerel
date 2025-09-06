@@ -8,6 +8,22 @@ import (
 )
 
 var (
+	// DeviceHistoriesColumns holds the columns for the "device_histories" table.
+	DeviceHistoriesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "device_uuid", Type: field.TypeString},
+		{Name: "event_type", Type: field.TypeString},
+		{Name: "timestamp", Type: field.TypeInt64},
+		{Name: "user_id", Type: field.TypeString, Nullable: true},
+		{Name: "tag", Type: field.TypeString, Nullable: true},
+		{Name: "created_at", Type: field.TypeTime},
+	}
+	// DeviceHistoriesTable holds the schema information for the "device_histories" table.
+	DeviceHistoriesTable = &schema.Table{
+		Name:       "device_histories",
+		Columns:    DeviceHistoriesColumns,
+		PrimaryKey: []*schema.Column{DeviceHistoriesColumns[0]},
+	}
 	// DeviceStatusColumns holds the columns for the "device_status" table.
 	DeviceStatusColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -26,6 +42,7 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		DeviceHistoriesTable,
 		DeviceStatusTable,
 	}
 )

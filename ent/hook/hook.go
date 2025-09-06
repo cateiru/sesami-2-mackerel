@@ -9,6 +9,18 @@ import (
 	"github.com/cateiru/sesami-2-mackerel/ent"
 )
 
+// The DeviceHistoryFunc type is an adapter to allow the use of ordinary
+// function as DeviceHistory mutator.
+type DeviceHistoryFunc func(context.Context, *ent.DeviceHistoryMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DeviceHistoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.DeviceHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DeviceHistoryMutation", m)
+}
+
 // The DeviceStatusFunc type is an adapter to allow the use of ordinary
 // function as DeviceStatus mutator.
 type DeviceStatusFunc func(context.Context, *ent.DeviceStatusMutation) (ent.Value, error)

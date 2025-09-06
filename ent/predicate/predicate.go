@@ -6,5 +6,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// DeviceHistory is the predicate function for devicehistory builders.
+type DeviceHistory func(*sql.Selector)
+
 // DeviceStatus is the predicate function for devicestatus builders.
 type DeviceStatus func(*sql.Selector)

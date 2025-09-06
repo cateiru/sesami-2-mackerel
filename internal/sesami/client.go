@@ -25,6 +25,16 @@ type DeviceStatus struct {
 	Timestamp         int64   `json:"timestamp"`
 }
 
+type HistoryEntry struct {
+	Type      string `json:"type"`
+	TimeStamp int64  `json:"timeStamp"`
+	Tag       string `json:"tag"`
+}
+
+type DeviceHistoryResponse struct {
+	History []HistoryEntry `json:"history"`
+}
+
 func NewClient(cfg *config.Config) *Client {
 	return &Client{
 		APIKey:       cfg.SESAMI.APIKey,
@@ -70,4 +80,42 @@ func (c *Client) GetDeviceStatus() (*DeviceStatus, error) {
 	}
 
 	return &status, nil
+}
+
+func (c *Client) GetDeviceHistory() ([]HistoryEntry, error) {
+	url := fmt.Sprintf("https://app.candyhouse.co/api/sesame2/%s/history", c.DeviceUUID)
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("履歴取得リクエスト作成エラー: %w", err)
+	}
+
+	req.Header.Set("X-Api-Key", c.APIKey)
+	req.Header.Set("User-Agent", c.APIUserAgent)
+
+	client := &http.Client{
+		Timeout: c.APITimeout,
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("履歴取得HTTP リクエストエラー: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("履歴取得API エラー: ステータスコード %d", resp.StatusCode)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("履歴レスポンス読み取りエラー: %w", err)
+	}
+
+	var historyResp DeviceHistoryResponse
+	if err := json.Unmarshal(body, &historyResp); err != nil {
+		return nil, fmt.Errorf("履歴JSON パースエラー: %w", err)
+	}
+
+	return historyResp.History, nil
 }

@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"github.com/cateiru/sesami-2-mackerel/ent"
+	"github.com/cateiru/sesami-2-mackerel/ent/devicehistory"
 	"github.com/cateiru/sesami-2-mackerel/ent/devicestatus"
 	"github.com/cateiru/sesami-2-mackerel/internal/sesami"
 	_ "github.com/mattn/go-sqlite3"
@@ -63,6 +64,56 @@ func (c *Client) GetDeviceStatusHistory(limit int) ([]*ent.DeviceStatus, error) 
 
 	if err != nil {
 		return nil, fmt.Errorf("デバイスステータス取得エラー: %w", err)
+	}
+
+	return records, nil
+}
+
+func (c *Client) InsertDeviceHistory(deviceUUID string, history []sesami.HistoryEntry) error {
+	for _, entry := range history {
+		exists, err := c.entClient.DeviceHistory.
+			Query().
+			Where(
+				devicehistory.DeviceUUID(deviceUUID),
+				devicehistory.Timestamp(entry.TimeStamp),
+				devicehistory.EventType(entry.Type),
+			).
+			Exist(context.Background())
+
+		if err != nil {
+			return fmt.Errorf("履歴重複チェックエラー: %w", err)
+		}
+
+		if exists {
+			continue
+		}
+
+		_, err = c.entClient.DeviceHistory.
+			Create().
+			SetDeviceUUID(deviceUUID).
+			SetEventType(entry.Type).
+			SetTimestamp(entry.TimeStamp).
+			SetTag(entry.Tag).
+			Save(context.Background())
+
+		if err != nil {
+			return fmt.Errorf("履歴データ挿入エラー: %w", err)
+		}
+	}
+
+	return nil
+}
+
+func (c *Client) GetDeviceHistory(deviceUUID string, limit int) ([]*ent.DeviceHistory, error) {
+	records, err := c.entClient.DeviceHistory.
+		Query().
+		Where(devicehistory.DeviceUUID(deviceUUID)).
+		Order(ent.Desc(devicehistory.FieldTimestamp)).
+		Limit(limit).
+		All(context.Background())
+
+	if err != nil {
+		return nil, fmt.Errorf("履歴データ取得エラー: %w", err)
 	}
 
 	return records, nil

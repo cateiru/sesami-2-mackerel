@@ -11,6 +11,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/cateiru/sesami-2-mackerel/ent/devicehistory"
 	"github.com/cateiru/sesami-2-mackerel/ent/devicestatus"
 	"github.com/cateiru/sesami-2-mackerel/ent/predicate"
 )
@@ -24,8 +25,682 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeDeviceStatus = "DeviceStatus"
+	TypeDeviceHistory = "DeviceHistory"
+	TypeDeviceStatus  = "DeviceStatus"
 )
+
+// DeviceHistoryMutation represents an operation that mutates the DeviceHistory nodes in the graph.
+type DeviceHistoryMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	device_uuid   *string
+	event_type    *string
+	timestamp     *int64
+	addtimestamp  *int64
+	user_id       *string
+	tag           *string
+	created_at    *time.Time
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*DeviceHistory, error)
+	predicates    []predicate.DeviceHistory
+}
+
+var _ ent.Mutation = (*DeviceHistoryMutation)(nil)
+
+// devicehistoryOption allows management of the mutation configuration using functional options.
+type devicehistoryOption func(*DeviceHistoryMutation)
+
+// newDeviceHistoryMutation creates new mutation for the DeviceHistory entity.
+func newDeviceHistoryMutation(c config, op Op, opts ...devicehistoryOption) *DeviceHistoryMutation {
+	m := &DeviceHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeDeviceHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withDeviceHistoryID sets the ID field of the mutation.
+func withDeviceHistoryID(id int) devicehistoryOption {
+	return func(m *DeviceHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *DeviceHistory
+		)
+		m.oldValue = func(ctx context.Context) (*DeviceHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().DeviceHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withDeviceHistory sets the old DeviceHistory of the mutation.
+func withDeviceHistory(node *DeviceHistory) devicehistoryOption {
+	return func(m *DeviceHistoryMutation) {
+		m.oldValue = func(context.Context) (*DeviceHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m DeviceHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m DeviceHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *DeviceHistoryMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *DeviceHistoryMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().DeviceHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetDeviceUUID sets the "device_uuid" field.
+func (m *DeviceHistoryMutation) SetDeviceUUID(s string) {
+	m.device_uuid = &s
+}
+
+// DeviceUUID returns the value of the "device_uuid" field in the mutation.
+func (m *DeviceHistoryMutation) DeviceUUID() (r string, exists bool) {
+	v := m.device_uuid
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeviceUUID returns the old "device_uuid" field's value of the DeviceHistory entity.
+// If the DeviceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DeviceHistoryMutation) OldDeviceUUID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeviceUUID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeviceUUID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeviceUUID: %w", err)
+	}
+	return oldValue.DeviceUUID, nil
+}
+
+// ResetDeviceUUID resets all changes to the "device_uuid" field.
+func (m *DeviceHistoryMutation) ResetDeviceUUID() {
+	m.device_uuid = nil
+}
+
+// SetEventType sets the "event_type" field.
+func (m *DeviceHistoryMutation) SetEventType(s string) {
+	m.event_type = &s
+}
+
+// EventType returns the value of the "event_type" field in the mutation.
+func (m *DeviceHistoryMutation) EventType() (r string, exists bool) {
+	v := m.event_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEventType returns the old "event_type" field's value of the DeviceHistory entity.
+// If the DeviceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DeviceHistoryMutation) OldEventType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEventType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEventType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEventType: %w", err)
+	}
+	return oldValue.EventType, nil
+}
+
+// ResetEventType resets all changes to the "event_type" field.
+func (m *DeviceHistoryMutation) ResetEventType() {
+	m.event_type = nil
+}
+
+// SetTimestamp sets the "timestamp" field.
+func (m *DeviceHistoryMutation) SetTimestamp(i int64) {
+	m.timestamp = &i
+	m.addtimestamp = nil
+}
+
+// Timestamp returns the value of the "timestamp" field in the mutation.
+func (m *DeviceHistoryMutation) Timestamp() (r int64, exists bool) {
+	v := m.timestamp
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTimestamp returns the old "timestamp" field's value of the DeviceHistory entity.
+// If the DeviceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DeviceHistoryMutation) OldTimestamp(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTimestamp is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTimestamp requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTimestamp: %w", err)
+	}
+	return oldValue.Timestamp, nil
+}
+
+// AddTimestamp adds i to the "timestamp" field.
+func (m *DeviceHistoryMutation) AddTimestamp(i int64) {
+	if m.addtimestamp != nil {
+		*m.addtimestamp += i
+	} else {
+		m.addtimestamp = &i
+	}
+}
+
+// AddedTimestamp returns the value that was added to the "timestamp" field in this mutation.
+func (m *DeviceHistoryMutation) AddedTimestamp() (r int64, exists bool) {
+	v := m.addtimestamp
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetTimestamp resets all changes to the "timestamp" field.
+func (m *DeviceHistoryMutation) ResetTimestamp() {
+	m.timestamp = nil
+	m.addtimestamp = nil
+}
+
+// SetUserID sets the "user_id" field.
+func (m *DeviceHistoryMutation) SetUserID(s string) {
+	m.user_id = &s
+}
+
+// UserID returns the value of the "user_id" field in the mutation.
+func (m *DeviceHistoryMutation) UserID() (r string, exists bool) {
+	v := m.user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserID returns the old "user_id" field's value of the DeviceHistory entity.
+// If the DeviceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DeviceHistoryMutation) OldUserID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
+	}
+	return oldValue.UserID, nil
+}
+
+// ClearUserID clears the value of the "user_id" field.
+func (m *DeviceHistoryMutation) ClearUserID() {
+	m.user_id = nil
+	m.clearedFields[devicehistory.FieldUserID] = struct{}{}
+}
+
+// UserIDCleared returns if the "user_id" field was cleared in this mutation.
+func (m *DeviceHistoryMutation) UserIDCleared() bool {
+	_, ok := m.clearedFields[devicehistory.FieldUserID]
+	return ok
+}
+
+// ResetUserID resets all changes to the "user_id" field.
+func (m *DeviceHistoryMutation) ResetUserID() {
+	m.user_id = nil
+	delete(m.clearedFields, devicehistory.FieldUserID)
+}
+
+// SetTag sets the "tag" field.
+func (m *DeviceHistoryMutation) SetTag(s string) {
+	m.tag = &s
+}
+
+// Tag returns the value of the "tag" field in the mutation.
+func (m *DeviceHistoryMutation) Tag() (r string, exists bool) {
+	v := m.tag
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTag returns the old "tag" field's value of the DeviceHistory entity.
+// If the DeviceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DeviceHistoryMutation) OldTag(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTag is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTag requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTag: %w", err)
+	}
+	return oldValue.Tag, nil
+}
+
+// ClearTag clears the value of the "tag" field.
+func (m *DeviceHistoryMutation) ClearTag() {
+	m.tag = nil
+	m.clearedFields[devicehistory.FieldTag] = struct{}{}
+}
+
+// TagCleared returns if the "tag" field was cleared in this mutation.
+func (m *DeviceHistoryMutation) TagCleared() bool {
+	_, ok := m.clearedFields[devicehistory.FieldTag]
+	return ok
+}
+
+// ResetTag resets all changes to the "tag" field.
+func (m *DeviceHistoryMutation) ResetTag() {
+	m.tag = nil
+	delete(m.clearedFields, devicehistory.FieldTag)
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *DeviceHistoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *DeviceHistoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the DeviceHistory entity.
+// If the DeviceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DeviceHistoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *DeviceHistoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// Where appends a list predicates to the DeviceHistoryMutation builder.
+func (m *DeviceHistoryMutation) Where(ps ...predicate.DeviceHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the DeviceHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *DeviceHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.DeviceHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *DeviceHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *DeviceHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (DeviceHistory).
+func (m *DeviceHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *DeviceHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 6)
+	if m.device_uuid != nil {
+		fields = append(fields, devicehistory.FieldDeviceUUID)
+	}
+	if m.event_type != nil {
+		fields = append(fields, devicehistory.FieldEventType)
+	}
+	if m.timestamp != nil {
+		fields = append(fields, devicehistory.FieldTimestamp)
+	}
+	if m.user_id != nil {
+		fields = append(fields, devicehistory.FieldUserID)
+	}
+	if m.tag != nil {
+		fields = append(fields, devicehistory.FieldTag)
+	}
+	if m.created_at != nil {
+		fields = append(fields, devicehistory.FieldCreatedAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *DeviceHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case devicehistory.FieldDeviceUUID:
+		return m.DeviceUUID()
+	case devicehistory.FieldEventType:
+		return m.EventType()
+	case devicehistory.FieldTimestamp:
+		return m.Timestamp()
+	case devicehistory.FieldUserID:
+		return m.UserID()
+	case devicehistory.FieldTag:
+		return m.Tag()
+	case devicehistory.FieldCreatedAt:
+		return m.CreatedAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *DeviceHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case devicehistory.FieldDeviceUUID:
+		return m.OldDeviceUUID(ctx)
+	case devicehistory.FieldEventType:
+		return m.OldEventType(ctx)
+	case devicehistory.FieldTimestamp:
+		return m.OldTimestamp(ctx)
+	case devicehistory.FieldUserID:
+		return m.OldUserID(ctx)
+	case devicehistory.FieldTag:
+		return m.OldTag(ctx)
+	case devicehistory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown DeviceHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *DeviceHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case devicehistory.FieldDeviceUUID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeviceUUID(v)
+		return nil
+	case devicehistory.FieldEventType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEventType(v)
+		return nil
+	case devicehistory.FieldTimestamp:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTimestamp(v)
+		return nil
+	case devicehistory.FieldUserID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserID(v)
+		return nil
+	case devicehistory.FieldTag:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTag(v)
+		return nil
+	case devicehistory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown DeviceHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *DeviceHistoryMutation) AddedFields() []string {
+	var fields []string
+	if m.addtimestamp != nil {
+		fields = append(fields, devicehistory.FieldTimestamp)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *DeviceHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case devicehistory.FieldTimestamp:
+		return m.AddedTimestamp()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *DeviceHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case devicehistory.FieldTimestamp:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTimestamp(v)
+		return nil
+	}
+	return fmt.Errorf("unknown DeviceHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *DeviceHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(devicehistory.FieldUserID) {
+		fields = append(fields, devicehistory.FieldUserID)
+	}
+	if m.FieldCleared(devicehistory.FieldTag) {
+		fields = append(fields, devicehistory.FieldTag)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *DeviceHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *DeviceHistoryMutation) ClearField(name string) error {
+	switch name {
+	case devicehistory.FieldUserID:
+		m.ClearUserID()
+		return nil
+	case devicehistory.FieldTag:
+		m.ClearTag()
+		return nil
+	}
+	return fmt.Errorf("unknown DeviceHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *DeviceHistoryMutation) ResetField(name string) error {
+	switch name {
+	case devicehistory.FieldDeviceUUID:
+		m.ResetDeviceUUID()
+		return nil
+	case devicehistory.FieldEventType:
+		m.ResetEventType()
+		return nil
+	case devicehistory.FieldTimestamp:
+		m.ResetTimestamp()
+		return nil
+	case devicehistory.FieldUserID:
+		m.ResetUserID()
+		return nil
+	case devicehistory.FieldTag:
+		m.ResetTag()
+		return nil
+	case devicehistory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown DeviceHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *DeviceHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *DeviceHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *DeviceHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *DeviceHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *DeviceHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *DeviceHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *DeviceHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown DeviceHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *DeviceHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown DeviceHistory edge %s", name)
+}
 
 // DeviceStatusMutation represents an operation that mutates the DeviceStatus nodes in the graph.
 type DeviceStatusMutation struct {

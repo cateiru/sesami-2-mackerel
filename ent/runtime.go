@@ -5,6 +5,7 @@ package ent
 import (
 	"time"
 
+	"github.com/cateiru/sesami-2-mackerel/ent/devicehistory"
 	"github.com/cateiru/sesami-2-mackerel/ent/devicestatus"
 	"github.com/cateiru/sesami-2-mackerel/ent/schema"
 )
@@ -13,6 +14,12 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	devicehistoryFields := schema.DeviceHistory{}.Fields()
+	_ = devicehistoryFields
+	// devicehistoryDescCreatedAt is the schema descriptor for created_at field.
+	devicehistoryDescCreatedAt := devicehistoryFields[5].Descriptor()
+	// devicehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	devicehistory.DefaultCreatedAt = devicehistoryDescCreatedAt.Default.(func() time.Time)
 	devicestatusFields := schema.DeviceStatus{}.Fields()
 	_ = devicestatusFields
 	// devicestatusDescCreatedAt is the schema descriptor for created_at field.

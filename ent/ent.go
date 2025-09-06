@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/cateiru/sesami-2-mackerel/ent/devicehistory"
 	"github.com/cateiru/sesami-2-mackerel/ent/devicestatus"
 )
 
@@ -73,7 +74,8 @@ var (
 func checkColumn(t, c string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			devicestatus.Table: devicestatus.ValidColumn,
+			devicehistory.Table: devicehistory.ValidColumn,
+			devicestatus.Table:  devicestatus.ValidColumn,
 		})
 	})
 	return columnCheck(t, c)

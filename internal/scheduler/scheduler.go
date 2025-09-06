@@ -71,8 +71,19 @@ func (s *Scheduler) dailyTask() {
 	err = s.dbClient.InsertDeviceStatus(status)
 	if err != nil {
 		log.Printf("データベース保存エラー: %v", err)
+	}
+
+	history, err := s.sesamiClient.GetDeviceHistory()
+	if err != nil {
+		log.Printf("SESAMI履歴取得エラー: %v", err)
 	} else {
-		log.Println("デバイスステータスをデータベースに保存しました")
+		deviceUUID := s.sesamiClient.DeviceUUID
+		err = s.dbClient.InsertDeviceHistory(deviceUUID, history)
+		if err != nil {
+			log.Printf("履歴データベース保存エラー: %v", err)
+		} else {
+			log.Printf("履歴データを%d件保存しました", len(history))
+		}
 	}
 
 	err = s.mackerelClient.SendMetrics(status)

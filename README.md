@@ -6,6 +6,10 @@
 
 ### 以下の環境変数を設定した `.env` ファイルを作成してください
 
+```sh
+touch .env
+```
+
 ```env
 SESAMI_API_KEY=[your Sesame RESTful webAPI Key]
 SESAMI_DEVICE_UUID=[your Sesame Device UUID]

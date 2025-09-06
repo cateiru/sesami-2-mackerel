@@ -12,6 +12,8 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
+	// DeviceHistory is the client for interacting with the DeviceHistory builders.
+	DeviceHistory *DeviceHistoryClient
 	// DeviceStatus is the client for interacting with the DeviceStatus builders.
 	DeviceStatus *DeviceStatusClient
 
@@ -145,6 +147,7 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
+	tx.DeviceHistory = NewDeviceHistoryClient(tx.config)
 	tx.DeviceStatus = NewDeviceStatusClient(tx.config)
 }
 
@@ -155,7 +158,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: DeviceStatus.QueryXXX(), the query will be executed
+// applies a query, for example: DeviceHistory.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

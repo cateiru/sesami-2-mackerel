@@ -6,6 +6,9 @@ services:
       - SESAMI_API_KEY=${SESAMI_API_KEY}
       - SESAMI_DEVICE_UUID=${SESAMI_DEVICE_UUID}
       - MACKEREL_API_KEY=${MACKEREL_API_KEY}
+      - DATABASE_PATH=${DATABASE_PATH:-/data/sesami_2_mackerel.db}
     env_file:
       - .env
+    volumes:
+      - ./.data:/data
     restart: unless-stopped

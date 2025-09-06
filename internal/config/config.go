@@ -38,9 +38,6 @@ func Load() *Config {
 	cfg.Mackerel.APITimeout = 30 * time.Second
 
 	cfg.Database.Path = getEnv("DATABASE_PATH", false)
-	if cfg.Database.Path == "" {
-		cfg.Database.Path = "sesami_device_status.db"
-	}
 
 	if err := cfg.Validate(); err != nil {
 		log.Fatal(err)
@@ -74,6 +71,10 @@ func (c *Config) Validate() error {
 
 	if c.Mackerel.APIKey == "" {
 		return fmt.Errorf("MACKEREL_API_KEY が設定されていません")
+	}
+
+	if c.Database.Path == "" {
+		return fmt.Errorf("DATABASE_PATH が設定されていません")
 	}
 
 	return nil
