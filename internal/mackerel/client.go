@@ -31,12 +31,12 @@ func (c *Client) SendMetrics(status *sesami.DeviceStatus) error {
 	metrics := []Metric{
 		{
 			Name:  "sesami.battery",
-			Value: float64(status.Battery),
+			Value: float64(status.GetBattery()),
 			Time:  time.Now().Unix(),
 		},
 		{
 			Name:  "sesami.lock_status",
-			Value: boolToFloat(status.IsLocked),
+			Value: boolToFloat(status.IsLocked()),
 			Time:  time.Now().Unix(),
 		},
 	}
