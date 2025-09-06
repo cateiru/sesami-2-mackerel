@@ -19,11 +19,10 @@ type Client struct {
 }
 
 type DeviceStatus struct {
-	BatteryPercentage int     `json:"batteryPercentage"`
-	BatteryVoltage    float64 `json:"batteryVoltage"`
-	Position          int     `json:"position"`
-	CHSesame2Status   string  `json:"CHSesame2Status"`
-	Timestamp         int64   `json:"timestamp"`
+	BatteryPercentage int    `json:"batteryPercentage"`
+	Wm2State          bool   `json:"wm2State"`
+	CHSesame2Status   string `json:"CHSesame2Status"`
+	Timestamp         int64  `json:"timestamp"`
 }
 
 type HistoryEntry struct {

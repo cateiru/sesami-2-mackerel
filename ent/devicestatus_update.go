@@ -49,45 +49,17 @@ func (_u *DeviceStatusUpdate) AddBatteryPercentage(v int) *DeviceStatusUpdate {
 	return _u
 }
 
-// SetBatteryVoltage sets the "battery_voltage" field.
-func (_u *DeviceStatusUpdate) SetBatteryVoltage(v float64) *DeviceStatusUpdate {
-	_u.mutation.ResetBatteryVoltage()
-	_u.mutation.SetBatteryVoltage(v)
+// SetWm2State sets the "wm2_state" field.
+func (_u *DeviceStatusUpdate) SetWm2State(v bool) *DeviceStatusUpdate {
+	_u.mutation.SetWm2State(v)
 	return _u
 }
 
-// SetNillableBatteryVoltage sets the "battery_voltage" field if the given value is not nil.
-func (_u *DeviceStatusUpdate) SetNillableBatteryVoltage(v *float64) *DeviceStatusUpdate {
+// SetNillableWm2State sets the "wm2_state" field if the given value is not nil.
+func (_u *DeviceStatusUpdate) SetNillableWm2State(v *bool) *DeviceStatusUpdate {
 	if v != nil {
-		_u.SetBatteryVoltage(*v)
+		_u.SetWm2State(*v)
 	}
-	return _u
-}
-
-// AddBatteryVoltage adds value to the "battery_voltage" field.
-func (_u *DeviceStatusUpdate) AddBatteryVoltage(v float64) *DeviceStatusUpdate {
-	_u.mutation.AddBatteryVoltage(v)
-	return _u
-}
-
-// SetPosition sets the "position" field.
-func (_u *DeviceStatusUpdate) SetPosition(v int) *DeviceStatusUpdate {
-	_u.mutation.ResetPosition()
-	_u.mutation.SetPosition(v)
-	return _u
-}
-
-// SetNillablePosition sets the "position" field if the given value is not nil.
-func (_u *DeviceStatusUpdate) SetNillablePosition(v *int) *DeviceStatusUpdate {
-	if v != nil {
-		_u.SetPosition(*v)
-	}
-	return _u
-}
-
-// AddPosition adds value to the "position" field.
-func (_u *DeviceStatusUpdate) AddPosition(v int) *DeviceStatusUpdate {
-	_u.mutation.AddPosition(v)
 	return _u
 }
 
@@ -187,17 +159,8 @@ func (_u *DeviceStatusUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if value, ok := _u.mutation.AddedBatteryPercentage(); ok {
 		_spec.AddField(devicestatus.FieldBatteryPercentage, field.TypeInt, value)
 	}
-	if value, ok := _u.mutation.BatteryVoltage(); ok {
-		_spec.SetField(devicestatus.FieldBatteryVoltage, field.TypeFloat64, value)
-	}
-	if value, ok := _u.mutation.AddedBatteryVoltage(); ok {
-		_spec.AddField(devicestatus.FieldBatteryVoltage, field.TypeFloat64, value)
-	}
-	if value, ok := _u.mutation.Position(); ok {
-		_spec.SetField(devicestatus.FieldPosition, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedPosition(); ok {
-		_spec.AddField(devicestatus.FieldPosition, field.TypeInt, value)
+	if value, ok := _u.mutation.Wm2State(); ok {
+		_spec.SetField(devicestatus.FieldWm2State, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(devicestatus.FieldStatus, field.TypeString, value)
@@ -252,45 +215,17 @@ func (_u *DeviceStatusUpdateOne) AddBatteryPercentage(v int) *DeviceStatusUpdate
 	return _u
 }
 
-// SetBatteryVoltage sets the "battery_voltage" field.
-func (_u *DeviceStatusUpdateOne) SetBatteryVoltage(v float64) *DeviceStatusUpdateOne {
-	_u.mutation.ResetBatteryVoltage()
-	_u.mutation.SetBatteryVoltage(v)
+// SetWm2State sets the "wm2_state" field.
+func (_u *DeviceStatusUpdateOne) SetWm2State(v bool) *DeviceStatusUpdateOne {
+	_u.mutation.SetWm2State(v)
 	return _u
 }
 
-// SetNillableBatteryVoltage sets the "battery_voltage" field if the given value is not nil.
-func (_u *DeviceStatusUpdateOne) SetNillableBatteryVoltage(v *float64) *DeviceStatusUpdateOne {
+// SetNillableWm2State sets the "wm2_state" field if the given value is not nil.
+func (_u *DeviceStatusUpdateOne) SetNillableWm2State(v *bool) *DeviceStatusUpdateOne {
 	if v != nil {
-		_u.SetBatteryVoltage(*v)
+		_u.SetWm2State(*v)
 	}
-	return _u
-}
-
-// AddBatteryVoltage adds value to the "battery_voltage" field.
-func (_u *DeviceStatusUpdateOne) AddBatteryVoltage(v float64) *DeviceStatusUpdateOne {
-	_u.mutation.AddBatteryVoltage(v)
-	return _u
-}
-
-// SetPosition sets the "position" field.
-func (_u *DeviceStatusUpdateOne) SetPosition(v int) *DeviceStatusUpdateOne {
-	_u.mutation.ResetPosition()
-	_u.mutation.SetPosition(v)
-	return _u
-}
-
-// SetNillablePosition sets the "position" field if the given value is not nil.
-func (_u *DeviceStatusUpdateOne) SetNillablePosition(v *int) *DeviceStatusUpdateOne {
-	if v != nil {
-		_u.SetPosition(*v)
-	}
-	return _u
-}
-
-// AddPosition adds value to the "position" field.
-func (_u *DeviceStatusUpdateOne) AddPosition(v int) *DeviceStatusUpdateOne {
-	_u.mutation.AddPosition(v)
 	return _u
 }
 
@@ -420,17 +355,8 @@ func (_u *DeviceStatusUpdateOne) sqlSave(ctx context.Context) (_node *DeviceStat
 	if value, ok := _u.mutation.AddedBatteryPercentage(); ok {
 		_spec.AddField(devicestatus.FieldBatteryPercentage, field.TypeInt, value)
 	}
-	if value, ok := _u.mutation.BatteryVoltage(); ok {
-		_spec.SetField(devicestatus.FieldBatteryVoltage, field.TypeFloat64, value)
-	}
-	if value, ok := _u.mutation.AddedBatteryVoltage(); ok {
-		_spec.AddField(devicestatus.FieldBatteryVoltage, field.TypeFloat64, value)
-	}
-	if value, ok := _u.mutation.Position(); ok {
-		_spec.SetField(devicestatus.FieldPosition, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedPosition(); ok {
-		_spec.AddField(devicestatus.FieldPosition, field.TypeInt, value)
+	if value, ok := _u.mutation.Wm2State(); ok {
+		_spec.SetField(devicestatus.FieldWm2State, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(devicestatus.FieldStatus, field.TypeString, value)

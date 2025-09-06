@@ -789,10 +789,7 @@ type DeviceStatusMutation struct {
 	id                    *int
 	battery_percentage    *int
 	addbattery_percentage *int
-	battery_voltage       *float64
-	addbattery_voltage    *float64
-	position              *int
-	addposition           *int
+	wm2_state             *bool
 	status                *string
 	timestamp             *int64
 	addtimestamp          *int64
@@ -957,116 +954,40 @@ func (m *DeviceStatusMutation) ResetBatteryPercentage() {
 	m.addbattery_percentage = nil
 }
 
-// SetBatteryVoltage sets the "battery_voltage" field.
-func (m *DeviceStatusMutation) SetBatteryVoltage(f float64) {
-	m.battery_voltage = &f
-	m.addbattery_voltage = nil
+// SetWm2State sets the "wm2_state" field.
+func (m *DeviceStatusMutation) SetWm2State(b bool) {
+	m.wm2_state = &b
 }
 
-// BatteryVoltage returns the value of the "battery_voltage" field in the mutation.
-func (m *DeviceStatusMutation) BatteryVoltage() (r float64, exists bool) {
-	v := m.battery_voltage
+// Wm2State returns the value of the "wm2_state" field in the mutation.
+func (m *DeviceStatusMutation) Wm2State() (r bool, exists bool) {
+	v := m.wm2_state
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldBatteryVoltage returns the old "battery_voltage" field's value of the DeviceStatus entity.
+// OldWm2State returns the old "wm2_state" field's value of the DeviceStatus entity.
 // If the DeviceStatus object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DeviceStatusMutation) OldBatteryVoltage(ctx context.Context) (v float64, err error) {
+func (m *DeviceStatusMutation) OldWm2State(ctx context.Context) (v bool, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldBatteryVoltage is only allowed on UpdateOne operations")
+		return v, errors.New("OldWm2State is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldBatteryVoltage requires an ID field in the mutation")
+		return v, errors.New("OldWm2State requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldBatteryVoltage: %w", err)
+		return v, fmt.Errorf("querying old value for OldWm2State: %w", err)
 	}
-	return oldValue.BatteryVoltage, nil
+	return oldValue.Wm2State, nil
 }
 
-// AddBatteryVoltage adds f to the "battery_voltage" field.
-func (m *DeviceStatusMutation) AddBatteryVoltage(f float64) {
-	if m.addbattery_voltage != nil {
-		*m.addbattery_voltage += f
-	} else {
-		m.addbattery_voltage = &f
-	}
-}
-
-// AddedBatteryVoltage returns the value that was added to the "battery_voltage" field in this mutation.
-func (m *DeviceStatusMutation) AddedBatteryVoltage() (r float64, exists bool) {
-	v := m.addbattery_voltage
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetBatteryVoltage resets all changes to the "battery_voltage" field.
-func (m *DeviceStatusMutation) ResetBatteryVoltage() {
-	m.battery_voltage = nil
-	m.addbattery_voltage = nil
-}
-
-// SetPosition sets the "position" field.
-func (m *DeviceStatusMutation) SetPosition(i int) {
-	m.position = &i
-	m.addposition = nil
-}
-
-// Position returns the value of the "position" field in the mutation.
-func (m *DeviceStatusMutation) Position() (r int, exists bool) {
-	v := m.position
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldPosition returns the old "position" field's value of the DeviceStatus entity.
-// If the DeviceStatus object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DeviceStatusMutation) OldPosition(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldPosition is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldPosition requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldPosition: %w", err)
-	}
-	return oldValue.Position, nil
-}
-
-// AddPosition adds i to the "position" field.
-func (m *DeviceStatusMutation) AddPosition(i int) {
-	if m.addposition != nil {
-		*m.addposition += i
-	} else {
-		m.addposition = &i
-	}
-}
-
-// AddedPosition returns the value that was added to the "position" field in this mutation.
-func (m *DeviceStatusMutation) AddedPosition() (r int, exists bool) {
-	v := m.addposition
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetPosition resets all changes to the "position" field.
-func (m *DeviceStatusMutation) ResetPosition() {
-	m.position = nil
-	m.addposition = nil
+// ResetWm2State resets all changes to the "wm2_state" field.
+func (m *DeviceStatusMutation) ResetWm2State() {
+	m.wm2_state = nil
 }
 
 // SetStatus sets the "status" field.
@@ -1231,15 +1152,12 @@ func (m *DeviceStatusMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DeviceStatusMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 5)
 	if m.battery_percentage != nil {
 		fields = append(fields, devicestatus.FieldBatteryPercentage)
 	}
-	if m.battery_voltage != nil {
-		fields = append(fields, devicestatus.FieldBatteryVoltage)
-	}
-	if m.position != nil {
-		fields = append(fields, devicestatus.FieldPosition)
+	if m.wm2_state != nil {
+		fields = append(fields, devicestatus.FieldWm2State)
 	}
 	if m.status != nil {
 		fields = append(fields, devicestatus.FieldStatus)
@@ -1260,10 +1178,8 @@ func (m *DeviceStatusMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case devicestatus.FieldBatteryPercentage:
 		return m.BatteryPercentage()
-	case devicestatus.FieldBatteryVoltage:
-		return m.BatteryVoltage()
-	case devicestatus.FieldPosition:
-		return m.Position()
+	case devicestatus.FieldWm2State:
+		return m.Wm2State()
 	case devicestatus.FieldStatus:
 		return m.Status()
 	case devicestatus.FieldTimestamp:
@@ -1281,10 +1197,8 @@ func (m *DeviceStatusMutation) OldField(ctx context.Context, name string) (ent.V
 	switch name {
 	case devicestatus.FieldBatteryPercentage:
 		return m.OldBatteryPercentage(ctx)
-	case devicestatus.FieldBatteryVoltage:
-		return m.OldBatteryVoltage(ctx)
-	case devicestatus.FieldPosition:
-		return m.OldPosition(ctx)
+	case devicestatus.FieldWm2State:
+		return m.OldWm2State(ctx)
 	case devicestatus.FieldStatus:
 		return m.OldStatus(ctx)
 	case devicestatus.FieldTimestamp:
@@ -1307,19 +1221,12 @@ func (m *DeviceStatusMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetBatteryPercentage(v)
 		return nil
-	case devicestatus.FieldBatteryVoltage:
-		v, ok := value.(float64)
+	case devicestatus.FieldWm2State:
+		v, ok := value.(bool)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetBatteryVoltage(v)
-		return nil
-	case devicestatus.FieldPosition:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetPosition(v)
+		m.SetWm2State(v)
 		return nil
 	case devicestatus.FieldStatus:
 		v, ok := value.(string)
@@ -1353,12 +1260,6 @@ func (m *DeviceStatusMutation) AddedFields() []string {
 	if m.addbattery_percentage != nil {
 		fields = append(fields, devicestatus.FieldBatteryPercentage)
 	}
-	if m.addbattery_voltage != nil {
-		fields = append(fields, devicestatus.FieldBatteryVoltage)
-	}
-	if m.addposition != nil {
-		fields = append(fields, devicestatus.FieldPosition)
-	}
 	if m.addtimestamp != nil {
 		fields = append(fields, devicestatus.FieldTimestamp)
 	}
@@ -1372,10 +1273,6 @@ func (m *DeviceStatusMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case devicestatus.FieldBatteryPercentage:
 		return m.AddedBatteryPercentage()
-	case devicestatus.FieldBatteryVoltage:
-		return m.AddedBatteryVoltage()
-	case devicestatus.FieldPosition:
-		return m.AddedPosition()
 	case devicestatus.FieldTimestamp:
 		return m.AddedTimestamp()
 	}
@@ -1393,20 +1290,6 @@ func (m *DeviceStatusMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddBatteryPercentage(v)
-		return nil
-	case devicestatus.FieldBatteryVoltage:
-		v, ok := value.(float64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddBatteryVoltage(v)
-		return nil
-	case devicestatus.FieldPosition:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddPosition(v)
 		return nil
 	case devicestatus.FieldTimestamp:
 		v, ok := value.(int64)
@@ -1445,11 +1328,8 @@ func (m *DeviceStatusMutation) ResetField(name string) error {
 	case devicestatus.FieldBatteryPercentage:
 		m.ResetBatteryPercentage()
 		return nil
-	case devicestatus.FieldBatteryVoltage:
-		m.ResetBatteryVoltage()
-		return nil
-	case devicestatus.FieldPosition:
-		m.ResetPosition()
+	case devicestatus.FieldWm2State:
+		m.ResetWm2State()
 		return nil
 	case devicestatus.FieldStatus:
 		m.ResetStatus()

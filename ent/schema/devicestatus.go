@@ -2,7 +2,7 @@ package schema
 
 import (
 	"time"
-	
+
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 )
@@ -17,10 +17,7 @@ func (DeviceStatus) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int("battery_percentage").
 			Comment("バッテリー残量（%）"),
-		field.Float("battery_voltage").
-			Comment("バッテリー電圧"),
-		field.Int("position").
-			Comment("デバイスの位置情報"),
+		field.Bool("wm2_state"),
 		field.String("status").
 			Comment("デバイスステータス"),
 		field.Int64("timestamp").

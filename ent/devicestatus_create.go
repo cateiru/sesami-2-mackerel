@@ -26,15 +26,9 @@ func (_c *DeviceStatusCreate) SetBatteryPercentage(v int) *DeviceStatusCreate {
 	return _c
 }
 
-// SetBatteryVoltage sets the "battery_voltage" field.
-func (_c *DeviceStatusCreate) SetBatteryVoltage(v float64) *DeviceStatusCreate {
-	_c.mutation.SetBatteryVoltage(v)
-	return _c
-}
-
-// SetPosition sets the "position" field.
-func (_c *DeviceStatusCreate) SetPosition(v int) *DeviceStatusCreate {
-	_c.mutation.SetPosition(v)
+// SetWm2State sets the "wm2_state" field.
+func (_c *DeviceStatusCreate) SetWm2State(v bool) *DeviceStatusCreate {
+	_c.mutation.SetWm2State(v)
 	return _c
 }
 
@@ -110,11 +104,8 @@ func (_c *DeviceStatusCreate) check() error {
 	if _, ok := _c.mutation.BatteryPercentage(); !ok {
 		return &ValidationError{Name: "battery_percentage", err: errors.New(`ent: missing required field "DeviceStatus.battery_percentage"`)}
 	}
-	if _, ok := _c.mutation.BatteryVoltage(); !ok {
-		return &ValidationError{Name: "battery_voltage", err: errors.New(`ent: missing required field "DeviceStatus.battery_voltage"`)}
-	}
-	if _, ok := _c.mutation.Position(); !ok {
-		return &ValidationError{Name: "position", err: errors.New(`ent: missing required field "DeviceStatus.position"`)}
+	if _, ok := _c.mutation.Wm2State(); !ok {
+		return &ValidationError{Name: "wm2_state", err: errors.New(`ent: missing required field "DeviceStatus.wm2_state"`)}
 	}
 	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`ent: missing required field "DeviceStatus.status"`)}
@@ -155,13 +146,9 @@ func (_c *DeviceStatusCreate) createSpec() (*DeviceStatus, *sqlgraph.CreateSpec)
 		_spec.SetField(devicestatus.FieldBatteryPercentage, field.TypeInt, value)
 		_node.BatteryPercentage = value
 	}
-	if value, ok := _c.mutation.BatteryVoltage(); ok {
-		_spec.SetField(devicestatus.FieldBatteryVoltage, field.TypeFloat64, value)
-		_node.BatteryVoltage = value
-	}
-	if value, ok := _c.mutation.Position(); ok {
-		_spec.SetField(devicestatus.FieldPosition, field.TypeInt, value)
-		_node.Position = value
+	if value, ok := _c.mutation.Wm2State(); ok {
+		_spec.SetField(devicestatus.FieldWm2State, field.TypeBool, value)
+		_node.Wm2State = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(devicestatus.FieldStatus, field.TypeString, value)

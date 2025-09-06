@@ -19,10 +19,8 @@ type DeviceStatus struct {
 	ID int `json:"id,omitempty"`
 	// バッテリー残量（%）
 	BatteryPercentage int `json:"battery_percentage,omitempty"`
-	// バッテリー電圧
-	BatteryVoltage float64 `json:"battery_voltage,omitempty"`
-	// デバイスの位置情報
-	Position int `json:"position,omitempty"`
+	// Wm2State holds the value of the "wm2_state" field.
+	Wm2State bool `json:"wm2_state,omitempty"`
 	// デバイスステータス
 	Status string `json:"status,omitempty"`
 	// SESAMI APIからのタイムスタンプ
@@ -37,9 +35,9 @@ func (*DeviceStatus) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case devicestatus.FieldBatteryVoltage:
-			values[i] = new(sql.NullFloat64)
-		case devicestatus.FieldID, devicestatus.FieldBatteryPercentage, devicestatus.FieldPosition, devicestatus.FieldTimestamp:
+		case devicestatus.FieldWm2State:
+			values[i] = new(sql.NullBool)
+		case devicestatus.FieldID, devicestatus.FieldBatteryPercentage, devicestatus.FieldTimestamp:
 			values[i] = new(sql.NullInt64)
 		case devicestatus.FieldStatus:
 			values[i] = new(sql.NullString)
@@ -72,17 +70,11 @@ func (_m *DeviceStatus) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.BatteryPercentage = int(value.Int64)
 			}
-		case devicestatus.FieldBatteryVoltage:
-			if value, ok := values[i].(*sql.NullFloat64); !ok {
-				return fmt.Errorf("unexpected type %T for field battery_voltage", values[i])
+		case devicestatus.FieldWm2State:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field wm2_state", values[i])
 			} else if value.Valid {
-				_m.BatteryVoltage = value.Float64
-			}
-		case devicestatus.FieldPosition:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field position", values[i])
-			} else if value.Valid {
-				_m.Position = int(value.Int64)
+				_m.Wm2State = value.Bool
 			}
 		case devicestatus.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -141,11 +133,8 @@ func (_m *DeviceStatus) String() string {
 	builder.WriteString("battery_percentage=")
 	builder.WriteString(fmt.Sprintf("%v", _m.BatteryPercentage))
 	builder.WriteString(", ")
-	builder.WriteString("battery_voltage=")
-	builder.WriteString(fmt.Sprintf("%v", _m.BatteryVoltage))
-	builder.WriteString(", ")
-	builder.WriteString("position=")
-	builder.WriteString(fmt.Sprintf("%v", _m.Position))
+	builder.WriteString("wm2_state=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Wm2State))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(_m.Status)

@@ -15,10 +15,8 @@ const (
 	FieldID = "id"
 	// FieldBatteryPercentage holds the string denoting the battery_percentage field in the database.
 	FieldBatteryPercentage = "battery_percentage"
-	// FieldBatteryVoltage holds the string denoting the battery_voltage field in the database.
-	FieldBatteryVoltage = "battery_voltage"
-	// FieldPosition holds the string denoting the position field in the database.
-	FieldPosition = "position"
+	// FieldWm2State holds the string denoting the wm2_state field in the database.
+	FieldWm2State = "wm2_state"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldTimestamp holds the string denoting the timestamp field in the database.
@@ -33,8 +31,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldBatteryPercentage,
-	FieldBatteryVoltage,
-	FieldPosition,
+	FieldWm2State,
 	FieldStatus,
 	FieldTimestamp,
 	FieldCreatedAt,
@@ -68,14 +65,9 @@ func ByBatteryPercentage(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldBatteryPercentage, opts...).ToFunc()
 }
 
-// ByBatteryVoltage orders the results by the battery_voltage field.
-func ByBatteryVoltage(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldBatteryVoltage, opts...).ToFunc()
-}
-
-// ByPosition orders the results by the position field.
-func ByPosition(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPosition, opts...).ToFunc()
+// ByWm2State orders the results by the wm2_state field.
+func ByWm2State(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWm2State, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.

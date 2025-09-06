@@ -29,8 +29,7 @@ var (
 	DeviceStatusColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "battery_percentage", Type: field.TypeInt},
-		{Name: "battery_voltage", Type: field.TypeFloat64},
-		{Name: "position", Type: field.TypeInt},
+		{Name: "wm2_state", Type: field.TypeBool},
 		{Name: "status", Type: field.TypeString},
 		{Name: "timestamp", Type: field.TypeInt64},
 		{Name: "created_at", Type: field.TypeTime},

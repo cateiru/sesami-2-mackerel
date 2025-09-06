@@ -59,14 +59,9 @@ func BatteryPercentage(v int) predicate.DeviceStatus {
 	return predicate.DeviceStatus(sql.FieldEQ(FieldBatteryPercentage, v))
 }
 
-// BatteryVoltage applies equality check predicate on the "battery_voltage" field. It's identical to BatteryVoltageEQ.
-func BatteryVoltage(v float64) predicate.DeviceStatus {
-	return predicate.DeviceStatus(sql.FieldEQ(FieldBatteryVoltage, v))
-}
-
-// Position applies equality check predicate on the "position" field. It's identical to PositionEQ.
-func Position(v int) predicate.DeviceStatus {
-	return predicate.DeviceStatus(sql.FieldEQ(FieldPosition, v))
+// Wm2State applies equality check predicate on the "wm2_state" field. It's identical to Wm2StateEQ.
+func Wm2State(v bool) predicate.DeviceStatus {
+	return predicate.DeviceStatus(sql.FieldEQ(FieldWm2State, v))
 }
 
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
@@ -124,84 +119,14 @@ func BatteryPercentageLTE(v int) predicate.DeviceStatus {
 	return predicate.DeviceStatus(sql.FieldLTE(FieldBatteryPercentage, v))
 }
 
-// BatteryVoltageEQ applies the EQ predicate on the "battery_voltage" field.
-func BatteryVoltageEQ(v float64) predicate.DeviceStatus {
-	return predicate.DeviceStatus(sql.FieldEQ(FieldBatteryVoltage, v))
+// Wm2StateEQ applies the EQ predicate on the "wm2_state" field.
+func Wm2StateEQ(v bool) predicate.DeviceStatus {
+	return predicate.DeviceStatus(sql.FieldEQ(FieldWm2State, v))
 }
 
-// BatteryVoltageNEQ applies the NEQ predicate on the "battery_voltage" field.
-func BatteryVoltageNEQ(v float64) predicate.DeviceStatus {
-	return predicate.DeviceStatus(sql.FieldNEQ(FieldBatteryVoltage, v))
-}
-
-// BatteryVoltageIn applies the In predicate on the "battery_voltage" field.
-func BatteryVoltageIn(vs ...float64) predicate.DeviceStatus {
-	return predicate.DeviceStatus(sql.FieldIn(FieldBatteryVoltage, vs...))
-}
-
-// BatteryVoltageNotIn applies the NotIn predicate on the "battery_voltage" field.
-func BatteryVoltageNotIn(vs ...float64) predicate.DeviceStatus {
-	return predicate.DeviceStatus(sql.FieldNotIn(FieldBatteryVoltage, vs...))
-}
-
-// BatteryVoltageGT applies the GT predicate on the "battery_voltage" field.
-func BatteryVoltageGT(v float64) predicate.DeviceStatus {
-	return predicate.DeviceStatus(sql.FieldGT(FieldBatteryVoltage, v))
-}
-
-// BatteryVoltageGTE applies the GTE predicate on the "battery_voltage" field.
-func BatteryVoltageGTE(v float64) predicate.DeviceStatus {
-	return predicate.DeviceStatus(sql.FieldGTE(FieldBatteryVoltage, v))
-}
-
-// BatteryVoltageLT applies the LT predicate on the "battery_voltage" field.
-func BatteryVoltageLT(v float64) predicate.DeviceStatus {
-	return predicate.DeviceStatus(sql.FieldLT(FieldBatteryVoltage, v))
-}
-
-// BatteryVoltageLTE applies the LTE predicate on the "battery_voltage" field.
-func BatteryVoltageLTE(v float64) predicate.DeviceStatus {
-	return predicate.DeviceStatus(sql.FieldLTE(FieldBatteryVoltage, v))
-}
-
-// PositionEQ applies the EQ predicate on the "position" field.
-func PositionEQ(v int) predicate.DeviceStatus {
-	return predicate.DeviceStatus(sql.FieldEQ(FieldPosition, v))
-}
-
-// PositionNEQ applies the NEQ predicate on the "position" field.
-func PositionNEQ(v int) predicate.DeviceStatus {
-	return predicate.DeviceStatus(sql.FieldNEQ(FieldPosition, v))
-}
-
-// PositionIn applies the In predicate on the "position" field.
-func PositionIn(vs ...int) predicate.DeviceStatus {
-	return predicate.DeviceStatus(sql.FieldIn(FieldPosition, vs...))
-}
-
-// PositionNotIn applies the NotIn predicate on the "position" field.
-func PositionNotIn(vs ...int) predicate.DeviceStatus {
-	return predicate.DeviceStatus(sql.FieldNotIn(FieldPosition, vs...))
-}
-
-// PositionGT applies the GT predicate on the "position" field.
-func PositionGT(v int) predicate.DeviceStatus {
-	return predicate.DeviceStatus(sql.FieldGT(FieldPosition, v))
-}
-
-// PositionGTE applies the GTE predicate on the "position" field.
-func PositionGTE(v int) predicate.DeviceStatus {
-	return predicate.DeviceStatus(sql.FieldGTE(FieldPosition, v))
-}
-
-// PositionLT applies the LT predicate on the "position" field.
-func PositionLT(v int) predicate.DeviceStatus {
-	return predicate.DeviceStatus(sql.FieldLT(FieldPosition, v))
-}
-
-// PositionLTE applies the LTE predicate on the "position" field.
-func PositionLTE(v int) predicate.DeviceStatus {
-	return predicate.DeviceStatus(sql.FieldLTE(FieldPosition, v))
+// Wm2StateNEQ applies the NEQ predicate on the "wm2_state" field.
+func Wm2StateNEQ(v bool) predicate.DeviceStatus {
+	return predicate.DeviceStatus(sql.FieldNEQ(FieldWm2State, v))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.

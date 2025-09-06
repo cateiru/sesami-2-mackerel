@@ -45,11 +45,6 @@ func (c *Client) SendMetrics(status *sesami.DeviceStatus, serviceName string) er
 			Value: float64(status.BatteryPercentage),
 			Time:  status.Timestamp,
 		},
-		{
-			Name:  "sesami-battery-voltage",
-			Value: status.BatteryVoltage,
-			Time:  status.Timestamp,
-		},
 	}
 
 	jsonData, err := json.Marshal(metrics)
@@ -77,7 +72,7 @@ func (c *Client) SendMetrics(status *sesami.DeviceStatus, serviceName string) er
 		return fmt.Errorf("メトリクス送信失敗: ステータスコード %d", resp.StatusCode)
 	}
 
-	log.Printf("メトリクス送信完了: バッテリー残量=%d%%, 電圧=%.2fV", status.BatteryPercentage, status.BatteryVoltage)
+	log.Printf("メトリクス送信完了: バッテリー残量=%d%%", status.BatteryPercentage)
 	return nil
 }
 

@@ -42,8 +42,7 @@ func (c *Client) InsertDeviceStatus(status *sesami.DeviceStatus) error {
 	_, err := c.entClient.DeviceStatus.
 		Create().
 		SetBatteryPercentage(status.BatteryPercentage).
-		SetBatteryVoltage(status.BatteryVoltage).
-		SetPosition(status.Position).
+		SetWm2State(status.Wm2State).
 		SetStatus(status.CHSesame2Status).
 		SetTimestamp(status.Timestamp).
 		Save(context.Background())
