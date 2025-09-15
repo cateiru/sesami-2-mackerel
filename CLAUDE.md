@@ -19,7 +19,7 @@ go run main.go
 
 ### Docker Compose実行
 ```bash
-# .envファイルを作成後
+# .envファイルを作成後（compose.yamlを使用）
 docker compose up -d
 ```
 
@@ -44,6 +44,7 @@ go mod tidy
 - `SESAMI_API_KEY`: SESAMI RESTful webAPI Key
 - `SESAMI_DEVICE_UUID`: SESAMI Device UUID  
 - `MACKEREL_API_KEY`: Mackerel API Key
+- `DATABASE_PATH`: SQLiteデータベースファイルのパス（デフォルト: `/data/sesami_2_mackerel.db`）
 
 ## アーキテクチャ
 
@@ -55,6 +56,8 @@ go mod tidy
 - `internal/database/`: SQLiteデータベースクライアント（Entフレームワーク使用）
 - `ent/`: Entによる自動生成されたデータベース層コード（編集不可）
 - `ent/schema/`: データベーススキーマ定義（`devicestatus.go`, `devicehistory.go`）
+- `docs/`: プロジェクトドキュメント（API仕様、操作履歴タイプ対応表など）
+- `.data/`: Docker環境でのデータ永続化ディレクトリ（SQLiteファイル格納）
 
 ## データベース設計
 
@@ -64,6 +67,15 @@ go mod tidy
 **DeviceHistory**（デバイス履歴）:
 - イベントタイプ、タイムスタンプ、タグ情報を記録
 - 重複データの挿入を防ぐ仕組みを実装済み
+
+## SESAMI API情報
+
+**履歴タイプ対応表**（`docs/sesami.md`参照）:
+- Type 1: オープンセンサ施錠
+- Type 2: オープンセンサ解錠  
+- Type 8: 手動解錠
+- Type 90: ドア解錠
+- Type 91: ドア施錠
 
 ## 現在の実装状況
 
